@@ -12,3 +12,29 @@ html,body{margin:0;height:100%;background:#0b2a3d;-webkit-user-select:none;user-
 #locate{position:absolute;right:10px;bottom:calc(30px + env(safe-area-inset-bottom));z-index:1000;width:48px;height:48px;border-radius:24px;border:0;background:#fff;font-size:26px;box-shadow:0 1px 6px #0006}
 .pop b{font-size:15px}.pop div{margin-top:3px;color:#333}
 .nolabels .lbl{display:none}
+/* Course bar, course marks and legs */
+#coursebar{position:absolute;left:10px;right:68px;bottom:calc(22px + env(safe-area-inset-bottom));z-index:1000;background:#fffffff2;border-radius:12px;box-shadow:0 1px 6px #0006;padding:8px 10px;font:14px -apple-system,system-ui,sans-serif;color:#111}
+#coursebar[hidden]{display:none}
+#course{width:100%;font-size:16px;padding:6px;border:1px solid #bbb;border-radius:8px;background:#fff;color:#111}
+#summary:empty{display:none}
+#summary .seq{margin-top:6px;font-weight:600;line-height:1.5}
+#summary .dist{margin-top:2px;color:#444}
+#summary .dist span{color:#777}
+.port{color:#c8102e}.stbd{color:#00873e}
+.warn{color:#b35900}
+#status{bottom:calc(120px + env(safe-area-inset-bottom))}
+.cm{background:none;border:0}
+.cm .dot{position:absolute;left:-10px;top:-10px;width:20px;height:20px;border-radius:50%;background:#ffd400;border:4px solid;box-sizing:border-box}
+.cm.port .dot{border-color:#c8102e}.cm.stbd .dot{border-color:#00873e}
+.cm.approx .dot{background:#fff3a0;border-style:dashed}
+.cm .clbl{position:absolute;left:13px;top:-12px;white-space:nowrap;font:700 15px -apple-system,system-ui,sans-serif;color:#111;background:#fffe;border-radius:6px;padding:1px 5px;box-shadow:0 0 2px #0005}
+.cm .clbl i{font-style:normal;font-weight:500;color:#555;font-size:12px}
+.cm .clbl em{font-style:normal}
+.cm.port .clbl em{color:#c8102e}.cm.stbd .clbl em{color:#00873e}
+.cm.unplaced .clbl{outline:2px dashed #b35900}
+.leg{background:none;border:0}
+.leg .arr{position:absolute;left:-8px;top:-10px;width:16px;text-align:center;font-size:16px;line-height:20px;color:#0b2a3d}
+.leg .legd{position:absolute;left:10px;top:4px;font:600 11px system-ui;color:#0b2a3d;background:#fffc;border-radius:4px;padding:0 3px}
+.sf{background:none;border:0}
+.sf span{position:absolute;left:-16px;top:-11px;width:32px;height:22px;line-height:22px;text-align:center;border-radius:4px;background:#0b2a3d;color:#fff;font:700 11px system-ui}
+.pop button{margin-top:6px;font-size:14px;padding:4px 10px}

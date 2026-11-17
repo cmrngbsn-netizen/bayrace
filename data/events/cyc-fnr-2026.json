@@ -1,0 +1,354 @@
+{
+ "id": "cyc-fnr-2026",
+ "name": "CYC Friday Night Races 2026",
+ "source": "CYC2026 FNR SI v2.1 (incl. amendments), Addendum 2",
+ "start": {
+  "lat": 37.8715,
+  "lon": -122.4572,
+  "name": "Start",
+  "desc": "Orange banner on CYC Race Deck to a temporary buoy"
+ },
+ "finish": {
+  "lat": 37.8715,
+  "lon": -122.4572,
+  "name": "Finish",
+  "desc": "Blue banner on CYC Race Deck to a temporary buoy"
+ },
+ "marks": {
+  "4": {
+   "ref": "4"
+  },
+  "6": {
+   "ref": "6"
+  },
+  "12": {
+   "ref": "12"
+  },
+  "14": {
+   "ref": "RYC-BK",
+   "desc": "Yellow mark 0.1 nm north of Southampton platform \"Bob Klein\""
+  },
+  "15": {
+   "ref": "15"
+  },
+  "16": {
+   "ref": "16"
+  },
+  "17": {
+   "ref": "17"
+  },
+  "19": {
+   "ref": "19"
+  },
+  "N": {
+   "ref": "N"
+  },
+  "X": {
+   "ref": "X"
+  },
+  "BV": {
+   "lat": 37.8590,
+   "lon": -122.4570,
+   "approx": true,
+   "desc": "Inflatable, 0.3 nm south of Peninsula Point \"Belvedere\""
+  },
+  "CG": {
+   "lat": 37.8501,
+   "lon": -122.4741,
+   "approx": true,
+   "desc": "Sausalito Coast Guard mooring buoy, approx 0.4 nm @ 142°M from Sausalito Ferry Wharf"
+  },
+  "KC": {
+   "lat": 37.8742,
+   "lon": -122.4408,
+   "approx": true,
+   "desc": "Inflatable, approx 0.1 nm SW of Pt Bluff \"Keil Cove\""
+  },
+  "LHI": {
+   "lat": 37.8472,
+   "lon": -122.4534,
+   "approx": true,
+   "desc": "Inflatable, approx 0.2 nm north of YRA 12 (Little Harding)"
+  },
+  "Y": {
+   "lat": 37.8708,
+   "lon": -122.4512,
+   "approx": true,
+   "desc": "Inflatable, ~0.2 nm ESE of CYC harbor sea wall \"Elephant Rock\""
+  },
+  "W": {
+   "lat": 37.85,
+   "lon": -122.4731,
+   "approx": true,
+   "wind": true,
+   "desc": "Inflatable, approx 1.5 nm to windward of the start line — place on race day"
+  },
+  "L": {
+   "lat": 37.8665,
+   "lon": -122.4545,
+   "approx": true,
+   "wind": true,
+   "desc": "Inflatable, approx 0.2 nm to windward of the start line — place on race day"
+  }
+ },
+ "courses": [
+  {
+   "no": "1",
+   "section": "Series",
+   "marks": ["4-P", "Y-P"],
+   "dist": 2.8
+  },
+  {
+   "no": "2",
+   "section": "Series",
+   "marks": ["12-P", "Y-P"],
+   "dist": 3.5
+  },
+  {
+   "no": "3",
+   "section": "Series",
+   "marks": ["12-P", "4-P", "Y-P"],
+   "dist": 3.8
+  },
+  {
+   "no": "4",
+   "section": "Series",
+   "marks": ["12-P", "4-P", "LHI-S", "Y-P"],
+   "dist": 5.3
+  },
+  {
+   "no": "5",
+   "section": "Series",
+   "marks": ["12-P", "4-P", "12-P", "4-P", "Y-P"],
+   "dist": 7.0
+  },
+  {
+   "no": "6",
+   "section": "Series",
+   "marks": ["12-P", "4-P", "12-P", "4-P", "LHI-S", "Y-P"],
+   "dist": 8.6
+  },
+  {
+   "no": "7",
+   "section": "Series",
+   "marks": ["15-P", "4-P", "Y-P"],
+   "dist": 4.8
+  },
+  {
+   "no": "8",
+   "section": "Series",
+   "marks": ["15-P", "4-P", "LHI-S", "Y-P"],
+   "dist": 6.1
+  },
+  {
+   "no": "9",
+   "section": "Series",
+   "marks": ["15-P", "4-P", "12-P", "4-P", "LHI-S", "Y-P"],
+   "dist": 7.8
+  },
+  {
+   "no": "10",
+   "section": "Series",
+   "marks": ["15-P", "17-P", "15-P", "4-P", "LHI-S", "Y-P"],
+   "dist": 8.3
+  },
+  {
+   "no": "11",
+   "section": "Series",
+   "marks": ["16-P", "4-P", "LHI-S", "Y-P"],
+   "dist": 9.8
+  },
+  {
+   "no": "12",
+   "section": "Series",
+   "marks": ["LHI-S", "N-P", "12-P", "Y-P"],
+   "dist": 5.0
+  },
+  {
+   "no": "13",
+   "section": "Series",
+   "marks": ["15-P", "KC-P", "LHI-S", "Y-P"],
+   "dist": 8.3
+  },
+  {
+   "no": "14",
+   "section": "Series",
+   "marks": ["12-P", "BV-P", "12-P", "Y-P"],
+   "dist": 5.5
+  },
+  {
+   "no": "15",
+   "section": "Series",
+   "marks": ["BV-P", "4-P", "Y-P"],
+   "dist": 2.7
+  },
+  {
+   "no": "16",
+   "section": "Series",
+   "marks": ["BV-P", "4-P", "BV-P", "4-P", "Y-P"],
+   "dist": 4.1
+  },
+  {
+   "no": "17",
+   "section": "Series",
+   "marks": ["BV-P", "4-P", "BV-P", "LHI-S", "Y-P"],
+   "dist": 5.3
+  },
+  {
+   "no": "30",
+   "section": "Series",
+   "marks": ["19-P", "CG-P"],
+   "dist": 6.6
+  },
+  {
+   "no": "31",
+   "section": "Series",
+   "marks": ["19-P", "BV-P", "KC-P"],
+   "dist": 6.2
+  },
+  {
+   "no": "32",
+   "section": "Series",
+   "marks": ["14-P", "BV-P", "KC-P"],
+   "dist": 7.5
+  },
+  {
+   "no": "33",
+   "section": "Series",
+   "marks": ["BV-P", "14-P", "Y-S", "KC-P"],
+   "dist": 7.7
+  },
+  {
+   "no": "34",
+   "section": "Series",
+   "marks": ["BV-P", "19-P", "BV-P", "19-P"],
+   "dist": 9.1
+  },
+  {
+   "no": "35",
+   "section": "Series",
+   "marks": ["BV-P", "KC-P", "BV-P", "KC-P"],
+   "dist": 5.6
+  },
+  {
+   "no": "36",
+   "section": "Series",
+   "marks": ["12-P", "4-P"],
+   "dist": 3.8
+  },
+  {
+   "no": "37",
+   "section": "Series",
+   "marks": ["12-P", "4-P", "LHI-S"],
+   "dist": 4.3
+  },
+  {
+   "no": "38",
+   "section": "Series",
+   "marks": ["12-P", "4-P", "12-P", "4-P", "LHI-S"],
+   "dist": 5.3
+  },
+  {
+   "no": "39",
+   "section": "Series",
+   "marks": ["15-P", "KC-P", "LHI-S"],
+   "dist": 8.2
+  },
+  {
+   "no": "40",
+   "section": "Series",
+   "marks": ["19-P", "12-P", "4-P"],
+   "dist": 6.3
+  },
+  {
+   "no": "41",
+   "section": "Series",
+   "marks": ["15-P", "4-P", "LHI-S"],
+   "dist": 5.9
+  },
+  {
+   "no": "42",
+   "section": "Series",
+   "marks": ["15-P", "4-P", "12-P", "4-P", "LHI-S"],
+   "dist": 7.5
+  },
+  {
+   "no": "45",
+   "section": "Series",
+   "marks": ["12-P", "BV-P", "12-P"],
+   "dist": 5.3
+  },
+  {
+   "no": "46",
+   "section": "Series",
+   "marks": ["BV-P", "4-P"],
+   "dist": 2.5
+  },
+  {
+   "no": "47",
+   "section": "Series",
+   "marks": ["BV-P", "4-P", "BV-P", "4-P"],
+   "dist": 3.8
+  },
+  {
+   "no": "48",
+   "section": "Series",
+   "marks": ["BV-P", "4-P", "BV-P", "LHI-S"],
+   "dist": 5.1
+  },
+  {
+   "no": "49",
+   "section": "Series",
+   "marks": ["16-P", "4-P", "LHI-S"],
+   "dist": 9.6
+  },
+  {
+   "no": "50",
+   "section": "Series",
+   "marks": ["W-P", "Y-P"],
+   "dist": 3.7
+  },
+  {
+   "no": "51",
+   "section": "Series",
+   "marks": ["W-P", "L-P", "W-P", "Y-P"],
+   "dist": 4.8
+  },
+  {
+   "no": "52",
+   "section": "Series",
+   "marks": ["12-P", "L-P", "12-P", "Y-P"],
+   "dist": 5.6
+  },
+  {
+   "no": "71",
+   "section": "Pursuit (Apr 3 & Sep 4)",
+   "marks": ["19-S", "LHI-S", "Y-P"],
+   "dist": 6.2
+  },
+  {
+   "no": "72",
+   "section": "Pursuit (Apr 3 & Sep 4)",
+   "marks": ["KC-S", "15-P", "Y-P"],
+   "dist": 6.2
+  },
+  {
+   "no": "73",
+   "section": "Pursuit (Apr 3 & Sep 4)",
+   "marks": ["15-P", "4-P", "KC-P"],
+   "dist": 6.2
+  },
+  {
+   "no": "74",
+   "section": "Pursuit (Apr 3 & Sep 4)",
+   "marks": ["17-S", "15-S", "12-P", "Y-P"],
+   "dist": 6.2
+  },
+  {
+   "no": "75",
+   "section": "Pursuit (Apr 3 & Sep 4)",
+   "marks": ["17-S", "CG-S", "12-P", "Y-P"],
+   "dist": 6.2
+  }
+ ]
+}

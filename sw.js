@@ -1,5 +1,5 @@
-const SHELL = 'shell-v1', TILES = 'tiles-v1', MAX_TILES = 4000;
-const FILES = ['./', 'index.html', 'app.js', 'style.css', 'manifest.webmanifest', 'data/marks.json', 'lib/leaflet.js', 'lib/leaflet.css',
+const SHELL = 'shell-v2', TILES = 'tiles-v1', MAX_TILES = 4000;
+const FILES = ['./', 'index.html', 'app.js', 'style.css', 'manifest.webmanifest', 'data/marks.json', 'courses.js', 'data/events/cyc-fnr-2026.json', 'lib/leaflet.js', 'lib/leaflet.css',
   'lib/images/marker-icon.png', 'lib/images/layers.png', 'lib/images/layers-2x.png', 'icon-180.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(SHELL).then(c => c.addAll(FILES))); self.skipWaiting(); });
 self.addEventListener('activate', e => e.waitUntil(

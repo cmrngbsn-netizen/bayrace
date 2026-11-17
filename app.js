@@ -18,6 +18,7 @@ const BASEMAPS = {
 
 const map = L.map('map', {center: [37.83, -122.43], zoom: 12, zoomControl: false, layers: [BASEMAPS['Chart (simple)']]});
 L.control.zoom({position: 'topleft'}).addTo(map);
+map.attributionControl.setPrefix(false);  // keep the credit line to one row on a phone
 
 // Surface tile failures so a blank map isn't a mystery.
 const status = document.getElementById('status');
@@ -30,14 +31,17 @@ Object.entries(BASEMAPS).forEach(([name, layer]) => layer.on('tileerror', () => 
 const groups = {yra: L.layerGroup().addTo(map), other: L.layerGroup()};
 const fmtDM = (v, pos, neg) => { const a = Math.abs(v), d = Math.floor(a), m = ((a - d) * 60).toFixed(3); return `${d}°${m}′ ${v >= 0 ? pos : neg}`; };
 
-fetch('data/marks.json').then(r => r.json()).then(marks => {
+// Resolves to {id: mark} once marks are on the map; courses.js looks marks up by id here.
+const marksReady = fetch('data/marks.json').then(r => r.json()).then(marks => {
   marks.forEach(m => {
     const label = m.group === 'yra' ? m.id : m.name;
     const icon = L.divIcon({className: `mk ${m.group}`, html: `<span class="dot"></span><span class="lbl">${label}</span>`, iconSize: [0, 0]});
     L.marker([m.lat, m.lon], {icon, keyboard: false}).addTo(groups[m.group])
       .bindPopup(`<div class="pop"><b>${m.group === 'yra' ? 'YRA ' + m.id : m.name}${m.nick ? ' — ' + m.nick : ''}</b><div>${m.desc}</div><div>${fmtDM(m.lat, 'N', 'S')}<br>${fmtDM(m.lon, 'E', 'W')}</div></div>`);
   });
-}).catch(() => { status.textContent = 'Could not load marks'; status.hidden = false; });
+  return Object.fromEntries(marks.map(m => [m.id, m]));
+}).catch(() => { status.textContent = 'Could not load marks'; status.hidden = false; return {}; });
+const showStatus = (msg, ms = 3000) => { status.textContent = msg; status.hidden = false; clearTimeout(errTimer); errTimer = setTimeout(() => status.hidden = true, ms); };
 
 L.control.layers(BASEMAPS, {'YRA marks': groups.yra, 'Other / club marks': groups.other}, {position: 'topright'}).addTo(map);
 
