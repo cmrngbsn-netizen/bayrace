@@ -1,16 +1,22 @@
 'use strict';
 // Basemap tile URLs. NOAA retired its raster charts in 2025 (the old NOAACharts tile URL 404s and
 // its export returns blank images), so the chart comes from NOAA's ENC-based chart display WMS.
+// Layers 1 = land/coast features, 2 = depths; DisplayCategory 1 = ECDIS "base" display (least clutter).
+// NOAA labels every tile separately, so 512px tiles mean fewer repeated place names. On retina,
+// Leaflet requests 2x-pixel images; DPI=192 makes NOAA draw text and symbols at 2x to match.
+const NOAA_WMS = 'https://gis.charttools.noaa.gov/arcgis/rest/services/MCS/NOAAChartDisplay/MapServer/exts/MaritimeChartService/WMSServer';
+const noaa = (layers, extra) => L.tileLayer.wms(NOAA_WMS,
+  {layers, format: 'image/png', tileSize: 512, detectRetina: true, dpi: L.Browser.retina ? 192 : 96, maxZoom: 18, attribution: 'NOAA Office of Coast Survey — not for navigation', ...extra});
 const BASEMAPS = {
-  'Nautical chart (NOAA)': L.tileLayer.wms('https://gis.charttools.noaa.gov/arcgis/rest/services/MCS/NOAAChartDisplay/MapServer/exts/MaritimeChartService/WMSServer',
-    {layers: '0,1,2,3,4,5,6,7,8,9,10,11,12', format: 'image/png', maxZoom: 18, attribution: 'NOAA Office of Coast Survey — not for navigation'}),
-  'Street': L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-    {maxZoom: 19, attribution: '© OpenStreetMap contributors'}),
+  'Chart (simple)': noaa('1,2', {display_params: JSON.stringify({ECDISParameters: {version: '10.9', DynamicParameters: {Parameter: [{name: 'DisplayCategory', value: '1'}]}}})}),
+  'Chart (full detail)': noaa('1,2,3,4,5,6,7'),
+  'Plain': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+    {maxZoom: 16, attribution: 'Esri, HERE, Garmin, © OpenStreetMap contributors'}),
   'Satellite': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
     {maxZoom: 19, attribution: 'Esri, Maxar, Earthstar Geographics'})
 };
 
-const map = L.map('map', {center: [37.83, -122.43], zoom: 12, zoomControl: false, layers: [BASEMAPS['Nautical chart (NOAA)']]});
+const map = L.map('map', {center: [37.83, -122.43], zoom: 12, zoomControl: false, layers: [BASEMAPS['Chart (simple)']]});
 L.control.zoom({position: 'topleft'}).addTo(map);
 
 // Surface tile failures so a blank map isn't a mystery.

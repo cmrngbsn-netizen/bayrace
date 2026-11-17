@@ -10,7 +10,7 @@ self.addEventListener('fetch', e => {
   if (u.origin === location.origin) {           // app shell: network-first so edits show up, cache fallback offline
     e.respondWith(fetch(e.request).then(r => { caches.open(SHELL).then(c => c.put(e.request, r.clone())); return r; })
       .catch(() => caches.match(e.request, {ignoreSearch: true})));
-  } else if (/\/tile\/|\/\d+\/\d+\/\d+\.png|WMSServer$/.test(u.pathname)) {   // map tiles: cache-first, filled as you browse
+  } else if (/\/tile\/|\/\d+\/\d+\/\d+(@2x)?\.png|WMSServer$/.test(u.pathname)) {   // map tiles: cache-first, filled as you browse
     e.respondWith(caches.open(TILES).then(async c => {
       const hit = await c.match(e.request); if (hit) return hit;
       const r = await fetch(e.request);

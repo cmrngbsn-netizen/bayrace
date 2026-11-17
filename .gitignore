@@ -1,2 +1,4 @@
 *.zip
 .DS_Store
+# Sailing instruction PDFs: kept locally as parser test samples, not published
+*.pdf
