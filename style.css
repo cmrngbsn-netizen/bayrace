@@ -1,0 +1,14 @@
+html,body{margin:0;height:100%;background:#0b2a3d;-webkit-user-select:none;user-select:none}
+#map{position:absolute;inset:0}
+.leaflet-container{font:13px -apple-system,system-ui,sans-serif}
+.mk{background:none;border:0}
+.mk .dot{position:absolute;left:-7px;top:-7px;width:14px;height:14px;border-radius:50%;background:#ffd400;border:2px solid #222;box-sizing:border-box}
+.mk.other .dot{background:#9fb3c8;width:10px;height:10px;left:-5px;top:-5px}
+.mk .lbl{position:absolute;left:10px;top:-9px;white-space:nowrap;font-weight:700;color:#111;text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 3px #fff}
+.mk.other .lbl{font-weight:500;font-size:11px}
+.leaflet-control-layers{font-size:15px}
+.leaflet-touch .leaflet-control-layers-toggle{width:44px;height:44px}
+#status{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom));z-index:1000;background:#000c;color:#fff;padding:8px 12px;border-radius:10px;font:13px system-ui;max-width:86vw;text-align:center}
+#locate{position:absolute;right:10px;bottom:calc(30px + env(safe-area-inset-bottom));z-index:1000;width:48px;height:48px;border-radius:24px;border:0;background:#fff;font-size:26px;box-shadow:0 1px 6px #0006}
+.pop b{font-size:15px}.pop div{margin-top:3px;color:#333}
+.nolabels .lbl{display:none}

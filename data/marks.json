@@ -1,0 +1,1037 @@
+[
+ {
+  "id": "1",
+  "name": "YRA-1",
+  "lat": 37.93,
+  "lon": -122.431667,
+  "desc": "Red Rock Island",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "2",
+  "name": "YRA-2",
+  "lat": 37.82623,
+  "lon": -122.42214,
+  "desc": "W Fl W 5s Alcatraz Light",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "3",
+  "name": "YRA-3",
+  "lat": 37.6992,
+  "lon": -123.00184,
+  "desc": "W Fl W 15s Farallon Light",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "4",
+  "name": "YRA-4",
+  "lat": 37.853333,
+  "lon": -122.441667,
+  "desc": "Lighted red nun buoy near Pt Knox",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "6",
+  "name": "YRA-6",
+  "lat": 37.811667,
+  "lon": -122.43,
+  "desc": "Lighted yellow column 'M' approx. 0.1 nm north of Ft Mason docks (Phil Perkins)",
+  "nick": "Phil Perkins",
+  "group": "yra"
+ },
+ {
+  "id": "7",
+  "name": "YRA-7",
+  "lat": 37.83332,
+  "lon": -122.39644,
+  "desc": "R '2' Fl R 6s San Francisco Bay North Channel Lighted Buoy 2",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "8",
+  "name": "YRA-8",
+  "lat": 37.84704,
+  "lon": -122.39647,
+  "desc": "R '4' Fl R 2.5s San Francisco Bay North Channel Lighted Buoy 4",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "12",
+  "name": "YRA-12",
+  "lat": 37.84383,
+  "lon": -122.45336,
+  "desc": "G '1' Fl G 4s Raccoon Strait Lighted Buoy 1 (Little Harding)",
+  "nick": "Little Harding",
+  "group": "yra"
+ },
+ {
+  "id": "13",
+  "name": "YRA-13",
+  "lat": 37.8075,
+  "lon": -122.460667,
+  "desc": "Crissy Field Buoy",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "15",
+  "name": "YRA-15",
+  "lat": 37.84,
+  "lon": -122.468333,
+  "desc": "Lighted yellow column approx. 0.5 nm east of Yellow Bluff (Hank Easom)",
+  "nick": "Hank Easom",
+  "group": "yra"
+ },
+ {
+  "id": "16",
+  "name": "YRA-16",
+  "lat": 37.81,
+  "lon": -122.465,
+  "desc": "Lighted yellow column approx. 0.2 nm east of Ft.Point (Tom Blackaller)",
+  "nick": "Tom Blackaller",
+  "group": "yra"
+ },
+ {
+  "id": "17",
+  "name": "YRA-17",
+  "lat": 37.83824,
+  "lon": -122.44599,
+  "desc": "RGR 'HR' Fl (2+1)R 6s Harding Rock Lighted Buoy HR",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "18",
+  "name": "YRA-18",
+  "lat": 37.81838,
+  "lon": -122.40345,
+  "desc": "GRG 'BR' Fl (2+1)G 6s Blossom Rock Lighted Bell Buoy BR (Blossom Rock)",
+  "nick": "Blossom Rock",
+  "group": "yra"
+ },
+ {
+  "id": "19",
+  "name": "YRA-19",
+  "lat": 37.8797,
+  "lon": -122.41493,
+  "desc": "R '8' Fl R 2.5s San Francisco Bay North Channel Lighted Buoy 8",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "21",
+  "name": "YRA-21",
+  "lat": 37.83202,
+  "lon": -122.40865,
+  "desc": "G '1' Fl G 6s San Francisco Bay North Channel Lighted Buoy 1",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "23",
+  "name": "YRA-23",
+  "lat": 37.86418,
+  "lon": -122.40888,
+  "desc": "RW 'A' Mo (A) W San Francisco Bay North Channel Lighted Buoy A",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "24",
+  "name": "YRA-24",
+  "lat": 37.86087,
+  "lon": -122.39647,
+  "desc": "R '6' Fl R 4s San Francisco Bay North Channel Lighted Bell Buoy 6",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "28",
+  "name": "YRA-28",
+  "lat": 37.89057,
+  "lon": -122.41766,
+  "desc": "R '2' Fl R 2.5s Southampton Shoal Channel Lighted Buoy 2",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "29",
+  "name": "YRA-29",
+  "lat": 37.90391,
+  "lon": -122.42015,
+  "desc": "R '4' Fl R 4s Southampton Shoal Channel Lighted Buoy 4",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "33",
+  "name": "YRA-33",
+  "lat": 37.80099,
+  "lon": -122.34777,
+  "desc": "R '4' Fl R 4s Oakland Inner Harbor Lighted Buoy 4",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "34",
+  "name": "YRA-34",
+  "lat": 37.75825,
+  "lon": -122.36835,
+  "desc": "R '2' Fl R 2.5s Lash Terminal Approach Lighted Buoy 2",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "35",
+  "name": "YRA-35",
+  "lat": 37.77679,
+  "lon": -122.33108,
+  "desc": "G '3' Fl G 2.5s Alameda Naval Air Station Channel Light 3",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "36",
+  "name": "YRA-36",
+  "lat": 37.77336,
+  "lon": -122.33016,
+  "desc": "R '4' Fl R 4s Alameda Naval Air Station Channel Light 4",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "37",
+  "name": "YRA-37",
+  "lat": 37.73952,
+  "lon": -122.3599,
+  "desc": "G '5' Fl G 4s Lash Terminal Approach Lighted Buoy 5",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "A",
+  "name": "YRA-A",
+  "lat": 37.810767,
+  "lon": -122.446817,
+  "desc": "Yellow sphere 'A' Outer Buoy St. Francis Yacht Club",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "ANITA",
+  "name": "YRA-ANITA",
+  "lat": 37.808333,
+  "lon": -122.453333,
+  "desc": "Offset buoy off Anita Rock",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "AS1",
+  "name": "YRA-AS1",
+  "lat": 37.771667,
+  "lon": -122.383333,
+  "desc": "Yellow sphere approx. 0.3 nm east of BVYC",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "B",
+  "name": "YRA-B",
+  "lat": 37.808567,
+  "lon": -122.4463,
+  "desc": "Inner yellow sphere mark 'B' off St. Francis Yacht Club - Billingham",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "DB",
+  "name": "YRA-DB",
+  "lat": 38.003333,
+  "lon": -122.966667,
+  "desc": "White buoy 'DB' located in Drakes Bay",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "CM2",
+  "name": "YRA-CM2",
+  "lat": 37.92826,
+  "lon": -122.46858,
+  "desc": "R '2' Iso R 6s Corte Madera Channel Light 2",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "DOC",
+  "name": "YRA-DOC",
+  "lat": 37.85768,
+  "lon": -122.3494,
+  "desc": "G '3' Fl G 4s Berkeley Marina Channel Light 3",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "FOC",
+  "name": "YRA-FOC",
+  "lat": 37.865,
+  "lon": -122.376667,
+  "desc": "Olympic Circle buoy 'F'",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "G1",
+  "name": "YRA-G1",
+  "lat": 37.76978,
+  "lon": -122.63222,
+  "desc": "G '1' Q G San Francisco Main Ship Channel Lighted Bell Buoy 1",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "G7",
+  "name": "YRA-G7",
+  "lat": 37.78187,
+  "lon": -122.58991,
+  "desc": "G '7' Fl G 2.5s San Francisco Main Ship Channel Lighted Bell Buoy 7",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "N",
+  "name": "YRA-N",
+  "lat": 37.85594,
+  "lon": -122.46868,
+  "desc": "R '2' Fl R 4s Sausalito Channel Light 2",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "NAS1",
+  "name": "YRA-NAS1",
+  "lat": 37.77726,
+  "lon": -122.34132,
+  "desc": "G '1' Fl G 4s Alameda Naval Air Station Channel Entrance Lighted Bell Buoy 1",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "NAS2",
+  "name": "YRA-NAS2",
+  "lat": 37.7742,
+  "lon": -122.34106,
+  "desc": "R '2' Fl R 4s Alameda Naval Air Station Channel Entrance Lighted Buoy 2",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "NG7",
+  "name": "YRA-NG7",
+  "lat": 37.93409,
+  "lon": -122.48553,
+  "desc": "G '7' Fl G 2.5s Corte Madera Channel Light 7",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "NO",
+  "name": "YRA-NO",
+  "lat": 37.80056,
+  "lon": -122.79863,
+  "desc": "Y 'N' Fl Y 4s San Francisco North Traffic Lane Lighted Bell Buoy N",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "NR6",
+  "name": "YRA-NR6",
+  "lat": 37.91625,
+  "lon": -122.42235,
+  "desc": "R '6' Fl R 2.5s Southampton Shoal Channel Lighted Buoy 6",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "NR12",
+  "name": "YRA-NR12",
+  "lat": 37.9136,
+  "lon": -122.44515,
+  "desc": "R '12' Fl R 2.5s San Francisco Bay North Channel Lighted Buoy 12",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "NR14",
+  "name": "YRA-NR14",
+  "lat": 37.93048,
+  "lon": -122.44343,
+  "desc": "R '14' Fl R 4s San Francisco Bay North Channel Lighted Buoy 14",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "PB",
+  "name": "YRA-PB",
+  "lat": 37.81271,
+  "lon": -122.54102,
+  "desc": "RGR Fl (2+1)R 6s Four Fathom Bank Lighted Bell Buoy (Point Bonita)",
+  "nick": "Point Bonita",
+  "group": "yra"
+ },
+ {
+  "id": "R2",
+  "name": "YRA-R2",
+  "lat": 37.76334,
+  "lon": -122.62904,
+  "desc": "R '2' Q R San Francisco Main Ship Channel Lighted Whistle Buoy 2",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "R8",
+  "name": "YRA-R8",
+  "lat": 37.7754,
+  "lon": -122.5873,
+  "desc": "R '8' Fl R 2.5s San Francisco Main Ship Channel Lighted Whistle Buoy 8",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "SC1",
+  "name": "YRA-SC1",
+  "lat": 37.77556,
+  "lon": -122.36585,
+  "desc": "GRG 'SC' Fl (2+1)G 6s San Francisco Bay Preferred Channel Lighted Buoy SC",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "SF",
+  "name": "YRA-SF",
+  "lat": 37.74993,
+  "lon": -122.69278,
+  "desc": "RW 'SF' Mo (A) W San Francisco Approach Lighted Whistle Buoy SF (Lightship)",
+  "nick": "Lightship",
+  "group": "yra"
+ },
+ {
+  "id": "SO",
+  "name": "YRA-SO",
+  "lat": 37.64877,
+  "lon": -122.695,
+  "desc": "Y 'S' Fl Y 4s San Francisco South Traffic Lane Lighted Bell Buoy S",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "TYC",
+  "name": "YRA-TYC",
+  "lat": 37.9095,
+  "lon": -122.47,
+  "desc": "Privately maintained White mark 'TYC' off entrance to Paradise Cove Harbor",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "WE",
+  "name": "YRA-WE",
+  "lat": 37.69105,
+  "lon": -122.79445,
+  "desc": "Y 'W' Fl Y 2.5s San Francisco West Traffic Lane Lighted Gong Buoy W",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "X",
+  "name": "YRA-X",
+  "lat": 37.811667,
+  "lon": -122.443333,
+  "desc": "Yellow/blue sphere 'X' Golden Gate Yacht Club",
+  "nick": null,
+  "group": "yra"
+ },
+ {
+  "id": "XOC",
+  "name": "YRA-XOC",
+  "lat": 37.873333,
+  "lon": -122.358333,
+  "desc": "Olympic Circle buoy 'X' (Bobbi Tossi)",
+  "nick": "Bobbi Tossi",
+  "group": "yra"
+ },
+ {
+  "id": "2CR",
+  "name": "2CR",
+  "lat": 37.93166,
+  "lon": -122.42089,
+  "desc": "R '2CR' Fl R 4s Castro Rocks Lighted Buoy 2CR",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "BON",
+  "name": "BON",
+  "lat": 37.8336,
+  "lon": -122.56829,
+  "desc": "R '2' Fl R 6s Bonita Channel Lighted Whistle Buoy 2",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "BRO",
+  "name": "BRO",
+  "lat": 37.963145,
+  "lon": -122.434389,
+  "desc": "Brothers Islands North of Richmond Bridge",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "BYC",
+  "name": "BYC",
+  "lat": 37.867833,
+  "lon": -122.326,
+  "desc": "Berkeley Yacht Club",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "CP-Z",
+  "name": "CP-Z",
+  "lat": 37.614,
+  "lon": -122.3118,
+  "desc": "Coyote Point Yacht Club Mark Z",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "CR",
+  "name": "CR",
+  "lat": 37.53612,
+  "lon": -122.55252,
+  "desc": "R '26' Fl R 2.5s Colorado Reef Lighted Buoy 26",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "DUX",
+  "name": "DUX",
+  "lat": 37.86017,
+  "lon": -122.69541,
+  "desc": "G '1DR' Fl G 6s Duxbury Reef Lighted Buoy 1DR",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "G25",
+  "name": "G25",
+  "lat": 38.03326,
+  "lon": -122.16193,
+  "desc": "G '25' Q G Carquinez Strait Lighted Buoy 25",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "GGB",
+  "name": "GGB",
+  "lat": 37.818433,
+  "lon": -122.478323,
+  "desc": "Golden Gate Bridge - Middle",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "GGB-NT",
+  "name": "GGB-NT",
+  "lat": 37.82515,
+  "lon": -122.479141,
+  "desc": "Golden Gate Bridge - North Tower",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "GGB-ST",
+  "name": "GGB-ST",
+  "lat": 37.813966,
+  "lon": -122.478361,
+  "desc": "Golden Gate Bridge - South Tower",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "HMB-1",
+  "name": "HMB-1",
+  "lat": 37.48623,
+  "lon": -122.5061,
+  "desc": "G '1' Fl G 2.5s Pillar Point Harbor Entrance Lighted Gong Buoy 1",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "HMB-3",
+  "name": "HMB-3",
+  "lat": 37.48153,
+  "lon": -122.48305,
+  "desc": "G '3' Fl G 4s Pillar Point Harbor Entrance Lighted Bell Buoy 3",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "HMB-1S",
+  "name": "HMB-1S",
+  "lat": 37.46469,
+  "lon": -122.46972,
+  "desc": "G '1S' Fl G 6s Southeast Reef Southern End Lighted Gong Buoy 1S",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "HMB-2",
+  "name": "HMB-2",
+  "lat": 37.47285,
+  "lon": -122.48412,
+  "desc": "R '2' Fl R 4s Pillar Point Harbor Entrance Lighted Buoy 2",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "HMB-PP",
+  "name": "HMB-PP",
+  "lat": 37.47223,
+  "lon": -122.51377,
+  "desc": "RW 'PP' Mo (A) W Pillar Point Harbor Approach Lighted Buoy PP",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "Island-1",
+  "name": "Island-1",
+  "lat": 37.793289,
+  "lon": -122.278976,
+  "desc": "Island YC red/orange ball near Jack London Square",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "Island-2",
+  "name": "Island-2",
+  "lat": 37.787647,
+  "lon": -122.266652,
+  "desc": "Island YC red/orange ball south of Jack London Aquatic Park",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "Island-3",
+  "name": "Island-3",
+  "lat": 37.783585,
+  "lon": -122.257527,
+  "desc": "Island YC red/orange ball between G daymark on west end of CG Island and Encinal Basin",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "Island-X",
+  "name": "Island-X",
+  "lat": 37.778413,
+  "lon": -122.248656,
+  "desc": "Island YC red/orange ball between RC dock and CG Island pier",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "Island-5",
+  "name": "Island-5",
+  "lat": 37.776848,
+  "lon": -122.244162,
+  "desc": "Island YC pink ball SE of CG Island",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "MIS#1",
+  "name": "MIS#1",
+  "lat": 38.07098,
+  "lon": -122.24752,
+  "desc": "G '1' Fl G 2.5s Mare Island Strait Lighted Buoy 1",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "MR",
+  "name": "MR",
+  "lat": 37.79283,
+  "lon": -122.51039,
+  "desc": "WO Fl W 5s Mile Rocks Light",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "ONR",
+  "name": "ONR",
+  "lat": 37.708147,
+  "lon": -122.583025,
+  "desc": "Y Fl Y6s Yellow ball San Francisco Outfall North Research Buoy",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "OYC-DR",
+  "name": "OYC-DR",
+  "lat": 37.792363,
+  "lon": -122.277332,
+  "desc": "'Debby Ratto' \u2013 red ball between Dragon Gate and Pasta Pelican at Jack London Square",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "OYC-2",
+  "name": "OYC-2",
+  "lat": 37.789632,
+  "lon": -122.270968,
+  "desc": "'2' - red ball on the Oakland side of the Estuary approx 200 yards west of Channel 2 tower",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "OYC-6",
+  "name": "OYC-6",
+  "lat": 37.786055,
+  "lon": -122.265329,
+  "desc": "'6' - red ball approx 200 yards west of OYC-X",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "OYC-X",
+  "name": "OYC-X",
+  "lat": 37.785304,
+  "lon": -122.263493,
+  "desc": "'X' - red ball set off gaps between OYC docks 5 and 6",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "OYC-5",
+  "name": "OYC-5",
+  "lat": 37.781967,
+  "lon": -122.260063,
+  "desc": "'5' - red ball at the entrance of Encinal Basin",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "OYC-GG",
+  "name": "OYC-GG",
+  "lat": 37.786873,
+  "lon": -122.254285,
+  "desc": "'George Gurrola' - red ball in Brooklyn Basin",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "OYC-EC",
+  "name": "OYC-EC",
+  "lat": 37.78109,
+  "lon": -122.252042,
+  "desc": "'Emile Carles' - set SW of Coast Guard docks",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "PPL-P",
+  "name": "PPL-P",
+  "lat": 38.01657,
+  "lon": -122.36747,
+  "desc": "WO 'P' Fl W 2.5s Point Pinole Light P",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "PRE#2",
+  "name": "PRE#2",
+  "lat": 38.04908,
+  "lon": -122.42205,
+  "desc": "R '2' Fl R 2.5s Petaluma River Entrance Light 2",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "PSB#2",
+  "name": "PSB#2",
+  "lat": 37.96779,
+  "lon": -122.42925,
+  "desc": "R '2' Fl R 4s San Pablo Bay Lighted Buoy 2",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "RHC#2",
+  "name": "RHC#2",
+  "lat": 37.91819,
+  "lon": -122.41749,
+  "desc": "R '2' Q R Richmond Harbor Channel Lighted Buoy 2",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "RHC#5",
+  "name": "RHC#5",
+  "lat": 37.90847,
+  "lon": -122.40016,
+  "desc": "G '5' Fl G 2.5s Richmond Harbor Channel Lighted Buoy 5",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "RHC#5A",
+  "name": "RHC#5A",
+  "lat": 37.90738,
+  "lon": -122.39183,
+  "desc": "G '5A' Fl G 4s Richmond Harbor Channel Lighted Buoy 5A",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "RHC#6",
+  "name": "RHC#6",
+  "lat": 37.90568,
+  "lon": -122.3941,
+  "desc": "R '6' Fl R 4s Richmond Harbor Channel Lighted Buoy 6",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "RHC#7",
+  "name": "RHC#7",
+  "lat": 37.9066,
+  "lon": -122.38624,
+  "desc": "G '7' Fl G 4s Richmond Harbor Channel Lighted Buoy 7",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "RHC#8",
+  "name": "RHC#8",
+  "lat": 37.90444,
+  "lon": -122.38501,
+  "desc": "R '8' Fl R 6s Richmond Harbor Channel Light 8",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "RWC#2",
+  "name": "RWC#2",
+  "lat": 37.55289,
+  "lon": -122.19653,
+  "desc": "R '2' Q R Redwood Creek Entrance Light 2",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "RWC#3",
+  "name": "RWC#3",
+  "lat": 37.54994,
+  "lon": -122.19337,
+  "desc": "G '3' Fl G 4s Redwood Creek Entrance Light 3",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "RWC#4",
+  "name": "RWC#4",
+  "lat": 37.54707,
+  "lon": -122.19509,
+  "desc": "R '4' Fl R 2.5s Redwood Creek Entrance Light 4",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "RWC#12",
+  "name": "RWC#12",
+  "lat": 37.55983,
+  "lon": -122.21054,
+  "desc": "R '12' Fl R 4s San Francisco Bay South Channel Light 12",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "RYC-A",
+  "name": "RYC-A",
+  "lat": 37.89745,
+  "lon": -122.389783,
+  "desc": "Richmond Yacht Club A (former Olympic Circle A)",
+  "nick": "former Olympic Circle A",
+  "group": "other"
+ },
+ {
+  "id": "RYC-BK",
+  "name": "RYC-BK",
+  "lat": 37.886117,
+  "lon": -122.402367,
+  "desc": "Richmond Yacht Club Bob Klein yellow - 1/4 nm N of Southampton Shoal Light",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "SBC#1",
+  "name": "SBC#1",
+  "lat": 37.69576,
+  "lon": -122.33945,
+  "desc": "G '1' Fl G 4s San Bruno Shoal Channel Light 1",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "SBC#2",
+  "name": "SBC#2",
+  "lat": 37.69494,
+  "lon": -122.3414,
+  "desc": "R '2' Fl R 4s San Bruno Shoal Channel Lighted Buoy 2",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "SBC#4",
+  "name": "SBC#4",
+  "lat": 37.66839,
+  "lon": -122.32837,
+  "desc": "R '4' Fl R 2.5s San Bruno Shoal Channel Light 4",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "SBC#6",
+  "name": "SBC#6",
+  "lat": 37.6431,
+  "lon": -122.31561,
+  "desc": "R '6' Fl R 4s San Bruno Shoal Channel Light 6",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "SBC#8",
+  "name": "SBC#8",
+  "lat": 37.60462,
+  "lon": -122.29141,
+  "desc": "R '8' Fl R 4s San Francisco Bay South Channel Light 8",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "SBC#8A",
+  "name": "SBC#8A",
+  "lat": 37.58883,
+  "lon": -122.26972,
+  "desc": "R '8A' San Francisco Bay South Channel Daybeacon 8A",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "SRC#17",
+  "name": "SRC#17",
+  "lat": 37.95734,
+  "lon": -122.45719,
+  "desc": "G '17' Fl G 4s San Francisco Bay North Channel Light 17",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "SYC-A",
+  "name": "SYC-A",
+  "lat": 37.532333,
+  "lon": -122.171833,
+  "desc": "Sequoia Yacht Club mark A. White collar buoy",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "SYC-B",
+  "name": "SYC-B",
+  "lat": 37.58267,
+  "lon": -122.24807,
+  "desc": "G '11' San Francisco Bay South Channel Buoy 11",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "SYC-E",
+  "name": "SYC-E",
+  "lat": 37.580167,
+  "lon": -122.217833,
+  "desc": "Sequoia Yacht Club mark E. Yellow collar buoy",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "SYC-O",
+  "name": "SYC-O",
+  "lat": 37.560167,
+  "lon": -122.186,
+  "desc": "Sequoia Yacht Club mark O. Yellow collar buoy",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "SYC-P",
+  "name": "SYC-P",
+  "lat": 37.5585,
+  "lon": -122.187833,
+  "desc": "Sequoia Yacht Club mark P. White collar buoy",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "SYC-S",
+  "name": "SYC-S",
+  "lat": 37.5635,
+  "lon": -122.218833,
+  "desc": "Sequoia Yacht Club mark S. Yellow collar buoy",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "SYC-T",
+  "name": "SYC-T",
+  "lat": 37.540167,
+  "lon": -122.182,
+  "desc": "Sequoia Yacht Club mark T. Yellow collar buoy",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "SYC-X",
+  "name": "SYC-X",
+  "lat": 37.5705,
+  "lon": -122.202167,
+  "desc": "Sequoia Yacht Club mark X. Yellow collar buoy",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "SYC-Y",
+  "name": "SYC-Y",
+  "lat": 37.537,
+  "lon": -122.1645,
+  "desc": "Sequoia Yacht Club mark Y. Yellow collar buoy",
+  "nick": null,
+  "group": "other"
+ },
+ {
+  "id": "TI#6",
+  "name": "TI#6",
+  "lat": 37.83323,
+  "lon": -122.37251,
+  "desc": "R '6' Fl R 2.5s Treasure Island North End Light 6",
+  "nick": null,
+  "group": "other"
+ }
+]
