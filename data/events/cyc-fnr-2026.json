@@ -3,14 +3,14 @@
  "name": "CYC Friday Night Races 2026",
  "source": "CYC2026 FNR SI v2.1 (incl. amendments), Addendum 2",
  "start": {
-  "lat": 37.8715,
-  "lon": -122.4572,
+  "lat": 37.8711,
+  "lon": -122.4567,
   "name": "Start",
   "desc": "Orange banner on CYC Race Deck to a temporary buoy"
  },
  "finish": {
-  "lat": 37.8715,
-  "lon": -122.4572,
+  "lat": 37.8711,
+  "lon": -122.4567,
   "name": "Finish",
   "desc": "Blue banner on CYC Race Deck to a temporary buoy"
  },
@@ -26,13 +26,16 @@
   },
   "14": {
    "ref": "RYC-BK",
-   "desc": "Yellow mark 0.1 nm north of Southampton platform \"Bob Klein\""
+   "desc": "Yellow mark 0.1 nm north of Southampton platform \"Bob Klein\"",
+   "nick": "Bob Klein"
   },
   "15": {
-   "ref": "15"
+   "ref": "15",
+   "nick": "Hank Easom"
   },
   "16": {
-   "ref": "16"
+   "ref": "16",
+   "nick": "Blackaller"
   },
   "17": {
    "ref": "17"
@@ -47,48 +50,72 @@
    "ref": "X"
   },
   "BV": {
-   "lat": 37.8590,
-   "lon": -122.4570,
+   "lat": 37.859,
+   "lon": -122.457,
    "approx": true,
-   "desc": "Inflatable, 0.3 nm south of Peninsula Point \"Belvedere\""
+   "desc": "Inflatable, 0.3 nm south of Peninsula Point \"Belvedere\"",
+   "nick": "Belvedere",
+   "type": "Inflatable",
+   "colors": [],
+   "place": "S of Peninsula Pt"
   },
   "CG": {
    "lat": 37.8501,
    "lon": -122.4741,
    "approx": true,
-   "desc": "Sausalito Coast Guard mooring buoy, approx 0.4 nm @ 142°M from Sausalito Ferry Wharf"
+   "desc": "Sausalito Coast Guard mooring buoy, approx 0.4 nm @ 142°M from Sausalito Ferry Wharf",
+   "type": "Mooring buoy",
+   "colors": [],
+   "place": "Sausalito Coast Guard"
   },
   "KC": {
    "lat": 37.8742,
    "lon": -122.4408,
    "approx": true,
-   "desc": "Inflatable, approx 0.1 nm SW of Pt Bluff \"Keil Cove\""
+   "desc": "Inflatable, approx 0.1 nm SW of Pt Bluff \"Keil Cove\"",
+   "nick": "Keil Cove",
+   "type": "Inflatable",
+   "colors": [],
+   "place": "off Pt Bluff"
   },
   "LHI": {
    "lat": 37.8472,
    "lon": -122.4534,
    "approx": true,
-   "desc": "Inflatable, approx 0.2 nm north of YRA 12 (Little Harding)"
+   "desc": "Inflatable, approx 0.2 nm north of YRA 12 (Little Harding)",
+   "type": "Inflatable",
+   "colors": [],
+   "place": "N of Little Harding"
   },
   "Y": {
    "lat": 37.8708,
    "lon": -122.4512,
    "approx": true,
-   "desc": "Inflatable, ~0.2 nm ESE of CYC harbor sea wall \"Elephant Rock\""
+   "desc": "Inflatable, ~0.2 nm ESE of CYC harbor sea wall \"Elephant Rock\"",
+   "nick": "Elephant Rock",
+   "type": "Inflatable",
+   "colors": [],
+   "place": "off CYC"
   },
   "W": {
    "lat": 37.85,
    "lon": -122.4731,
    "approx": true,
    "wind": true,
-   "desc": "Inflatable, approx 1.5 nm to windward of the start line — place on race day"
+   "desc": "Inflatable, approx 1.5 nm to windward of the start line — place on race day",
+   "type": "Inflatable",
+   "colors": [],
+   "place": "~1.5 nm to windward"
   },
   "L": {
    "lat": 37.8665,
    "lon": -122.4545,
    "approx": true,
    "wind": true,
-   "desc": "Inflatable, approx 0.2 nm to windward of the start line — place on race day"
+   "desc": "Inflatable, approx 0.2 nm to windward of the start line — place on race day",
+   "type": "Inflatable",
+   "colors": [],
+   "place": "~0.2 nm to windward"
   }
  },
  "courses": [

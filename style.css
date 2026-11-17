@@ -3,14 +3,13 @@ html,body{margin:0;height:100%;background:#0b2a3d;-webkit-user-select:none;user-
 .leaflet-container{font:13px -apple-system,system-ui,sans-serif}
 .mk{background:none;border:0}
 .mk .dot{position:absolute;left:-7px;top:-7px;width:14px;height:14px;border-radius:50%;background:#ffd400;border:2px solid #222;box-sizing:border-box}
-.mk.other .dot{background:#9fb3c8;width:10px;height:10px;left:-5px;top:-5px}
+.mk.other .dot{width:10px;height:10px;left:-5px;top:-5px;opacity:.85}
 .mk .lbl{position:absolute;left:10px;top:-9px;white-space:nowrap;font-weight:700;color:#111;text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 3px #fff}
 .mk.other .lbl{font-weight:500;font-size:11px}
 .leaflet-control-layers{font-size:15px}
 .leaflet-touch .leaflet-control-layers-toggle{width:44px;height:44px}
 #status{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom));z-index:1000;background:#000c;color:#fff;padding:8px 12px;border-radius:10px;font:13px system-ui;max-width:86vw;text-align:center}
 #locate{position:absolute;right:10px;bottom:calc(30px + env(safe-area-inset-bottom));z-index:1000;width:48px;height:48px;border-radius:24px;border:0;background:#fff;font-size:26px;box-shadow:0 1px 6px #0006}
-.pop b{font-size:15px}.pop div{margin-top:3px;color:#333}
 .nolabels .lbl{display:none}
 /* Course bar, course marks and legs */
 #coursebar{position:absolute;left:10px;right:68px;bottom:calc(22px + env(safe-area-inset-bottom));z-index:1000;background:#fffffff2;border-radius:12px;box-shadow:0 1px 6px #0006;padding:8px 10px;font:14px -apple-system,system-ui,sans-serif;color:#111}
@@ -23,18 +22,48 @@ html,body{margin:0;height:100%;background:#0b2a3d;-webkit-user-select:none;user-
 .port{color:#c8102e}.stbd{color:#00873e}
 .warn{color:#b35900}
 #status{bottom:calc(120px + env(safe-area-inset-bottom))}
-.cm{background:none;border:0}
-.cm .dot{position:absolute;left:-10px;top:-10px;width:20px;height:20px;border-radius:50%;background:#ffd400;border:4px solid;box-sizing:border-box}
-.cm.port .dot{border-color:#c8102e}.cm.stbd .dot{border-color:#00873e}
-.cm.approx .dot{background:#fff3a0;border-style:dashed}
-.cm .clbl{position:absolute;left:13px;top:-12px;white-space:nowrap;font:700 15px -apple-system,system-ui,sans-serif;color:#111;background:#fffe;border-radius:6px;padding:1px 5px;box-shadow:0 0 2px #0005}
-.cm .clbl i{font-style:normal;font-weight:500;color:#555;font-size:12px}
-.cm .clbl em{font-style:normal}
-.cm.port .clbl em{color:#c8102e}.cm.stbd .clbl em{color:#00873e}
-.cm.unplaced .clbl{outline:2px dashed #b35900}
-.leg{background:none;border:0}
-.leg .arr{position:absolute;left:-8px;top:-10px;width:16px;text-align:center;font-size:16px;line-height:20px;color:#0b2a3d}
-.leg .legd{position:absolute;left:10px;top:4px;font:600 11px system-ui;color:#0b2a3d;background:#fffc;border-radius:4px;padding:0 3px}
+.leaflet-popup-content button{margin-top:6px;font-size:14px;padding:4px 10px}
+/* Mark info card (popups) */
+.leaflet-popup-content{margin:12px 14px}
+.card{font:14px -apple-system,system-ui,sans-serif;color:#111;min-width:200px}
+.card .ch{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.card .ch .sw{flex:none;width:26px;height:26px;border-radius:50%;border:2px solid #0b2a3d;box-sizing:border-box}
+.card .ct{font-size:18px;font-weight:700;line-height:1.2}
+.card .cs{font-size:13px;color:#555}
+.card .cr{display:flex;gap:8px;margin:3px 0;line-height:1.35}
+.card .cr>span:first-child{flex:none;width:72px;color:#666;font-size:12px;text-transform:uppercase;letter-spacing:.03em;padding-top:2px}
+.card .cr.warn{color:#b35900}
+.card .cd{margin-top:8px;color:#444;font-size:13px}
+.card .cp{margin-top:4px;color:#777;font-size:12px}
+/* Course marks: dot in the mark's real colour; label card placed by placeLabels() */
+.cdot{background:none;border:0}
+.cdot span{position:absolute;left:-10px;top:-10px;width:20px;height:20px;border-radius:50%;border:3px solid #0b2a3d;box-sizing:border-box;box-shadow:0 0 0 2px #fff}
+.cdot.approx span{border-style:dashed;border-color:#b35900}
+.mtag{background:none;border:0}
+.tag{position:absolute;left:0;top:0;white-space:nowrap;background:#fff;border-radius:8px;padding:4px 7px 5px;box-shadow:0 1px 4px #0006;font:13px -apple-system,system-ui,sans-serif;color:#111;line-height:1.25}
+.tag.unplaced{outline:2px dashed #b35900;outline-offset:1px}
+.tag .t1{display:flex;align-items:baseline;gap:5px;font-size:15px}
+.tag .t1 b{font-size:16px}
+.tag .ord{align-self:center;min-width:18px;height:18px;padding:0 4px;box-sizing:border-box;border-radius:9px;background:#0b2a3d;color:#fff;font:700 11px/18px system-ui;text-align:center}
+.tag .nick{font-weight:600}
+.tag .place{color:#555;font-size:13px}
+.tag .t2{display:flex;align-items:center;gap:5px;margin-top:2px;color:#333}
+.tag .sw{flex:none;width:12px;height:12px;border-radius:50%;border:1.5px solid #0b2a3d;box-sizing:border-box}
+.tag .side{margin-left:3px;padding:0 5px;border-radius:4px;color:#fff;font:700 11px/16px system-ui;letter-spacing:.04em}
+.tag .side.port{background:#c8102e}.tag .side.stbd{background:#00873e}
+.legtag{background:none;border:0}
+.legtag .lt{position:absolute;left:0;top:0;display:flex;align-items:center;gap:2px;white-space:nowrap;background:#ffffffe6;border-radius:5px;padding:1px 5px;font:700 12px system-ui;color:#0b2a3d;box-shadow:0 0 2px #0004}
+.legtag .arr{display:inline-block;font-size:11px;line-height:14px}
+.tag .sw.unk{background:#fff;border-style:dashed;position:relative}
+.tag .sw.unk::after{content:'?';position:absolute;inset:0;font:700 8px/9px system-ui;text-align:center;color:#0b2a3d}
 .sf{background:none;border:0}
-.sf span{position:absolute;left:-16px;top:-11px;width:32px;height:22px;line-height:22px;text-align:center;border-radius:4px;background:#0b2a3d;color:#fff;font:700 11px system-ui}
-.pop button{margin-top:6px;font-size:14px;padding:4px 10px}
+.sf span{position:absolute;left:-16px;top:-11px;width:32px;height:22px;line-height:22px;text-align:center;border-radius:4px;background:#0b2a3d;color:#fff;font:700 11px system-ui;box-shadow:0 0 0 2px #fff}
+.tag .t1>.sw,.tag .t1>.side{display:none}
+.tag.compact{padding:3px 6px}
+.tag.compact .t1{align-items:center}
+.tag.compact .t1>.sw,.tag.compact .t1>.side{display:inline-block}
+.tag.compact .t1 .side{margin-left:0}
+.tag.compact .t2{display:none}
+.tag .nick,.tag .place{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tag .nick{max-width:130px}.tag .place{max-width:110px}
+.tag.mini .nick,.tag.mini .place{display:none}
