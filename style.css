@@ -64,6 +64,4 @@ html,body{margin:0;height:100%;background:#0b2a3d;-webkit-user-select:none;user-
 .tag.compact .t1>.sw,.tag.compact .t1>.side{display:inline-block}
 .tag.compact .t1 .side{margin-left:0}
 .tag.compact .t2{display:none}
-.tag .nick,.tag .place{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tag .nick{max-width:130px}.tag .place{max-width:110px}
 .tag.mini .nick,.tag.mini .place{display:none}

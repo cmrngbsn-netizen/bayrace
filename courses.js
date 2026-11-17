@@ -183,7 +183,7 @@ function placeLabels() {
     res = placeMarks(true);
   }
   leaderLayer.clearLayers();
-  res.leaders.forEach(([ll, p]) => L.polyline([ll, map.containerPointToLatLng(L.point(p.x, p.y))], {color: '#0b2a3d', weight: 1.5, opacity: 0.7, dashArray: '2 3', interactive: false}).addTo(leaderLayer));
+  res.leaders.forEach(([ll, p]) => L.polyline([ll, map.containerPointToLatLng(L.point(p.x, p.y))], {color: '#0b2a3d', weight: 2, opacity: 0.9, interactive: false}).addTo(leaderLayer));
 
   drawn.legs.forEach(leg => {
     const el = leg.tag.getElement(), lt = el.firstChild, P = leg.path.map(pt);

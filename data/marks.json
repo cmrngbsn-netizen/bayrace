@@ -125,9 +125,13 @@
   "desc": "Crissy Field Buoy",
   "nick": null,
   "group": "yra",
-  "colors": [],
-  "type": "Buoy",
-  "place": "Crissy Field"
+  "colors": [
+   "Red"
+  ],
+  "type": "Light on Pile",
+  "place": "Crissy Field",
+  "light": "Fl R 2.5s",
+  "pos_note": "Color, light and structure from NOAA ENC"
  },
  {
   "id": "15",
@@ -146,8 +150,8 @@
  {
   "id": "16",
   "name": "YRA-16",
-  "lat": 37.81,
-  "lon": -122.465,
+  "lat": 37.81002,
+  "lon": -122.46668,
   "desc": "Lighted yellow column approx. 0.2 nm east of Ft.Point (Tom Blackaller)",
   "nick": "Tom Blackaller",
   "group": "yra",
@@ -155,7 +159,8 @@
    "Yellow"
   ],
   "type": "Column",
-  "place": "Ft Point"
+  "place": "Ft Point",
+  "pos_note": "Position from NOAA ENC (charted 'C'); community list had 37.81000, -122.46500"
  },
  {
   "id": "17",
@@ -171,7 +176,7 @@
    "Red"
   ],
   "type": "Buoy",
-  "place": "Harding Rock #HR",
+  "place": "Harding Rock",
   "number": "HR",
   "light": "Fl (2+1)R 6s"
  },
@@ -189,7 +194,7 @@
    "Green"
   ],
   "type": "Bell buoy",
-  "place": "Blossom Rock #BR",
+  "place": "Blossom Rock",
   "number": "BR",
   "light": "Fl (2+1)G 6s"
  },
@@ -238,7 +243,7 @@
    "White"
   ],
   "type": "Buoy",
-  "place": "North Channel #A",
+  "place": "North Channel",
   "number": "A",
   "light": "Mo (A) W"
  },
@@ -333,7 +338,7 @@
   "colors": [
    "Green"
   ],
-  "type": "Fixed light",
+  "type": "Light on Pile",
   "place": "Alameda NAS Channel #3",
   "number": "3",
   "light": "Fl G 2.5s"
@@ -349,7 +354,7 @@
   "colors": [
    "Red"
   ],
-  "type": "Fixed light",
+  "type": "Light on Pile",
   "place": "Alameda NAS Channel #4",
   "number": "4",
   "light": "Fl R 4s"
@@ -373,8 +378,8 @@
  {
   "id": "A",
   "name": "YRA-A",
-  "lat": 37.810767,
-  "lon": -122.446817,
+  "lat": 37.81084,
+  "lon": -122.44527,
   "desc": "Yellow sphere 'A' Outer Buoy St. Francis Yacht Club",
   "nick": null,
   "group": "yra",
@@ -382,7 +387,8 @@
    "Yellow"
   ],
   "type": "Sphere",
-  "place": "StFYC outer"
+  "place": "StFYC outer",
+  "pos_note": "Position from NOAA ENC (charted 'A'); community list had 37.81077, -122.44682"
  },
  {
   "id": "ANITA",
@@ -449,7 +455,7 @@
   "colors": [
    "Red"
   ],
-  "type": "Fixed light",
+  "type": "Light on Pile",
   "place": "Corte Madera Channel #2",
   "number": "2",
   "light": "Iso R 6s"
@@ -465,7 +471,7 @@
   "colors": [
    "Green"
   ],
-  "type": "Fixed light",
+  "type": "Light on Pile",
   "place": "Berkeley Marina Channel #3",
   "number": "3",
   "light": "Fl G 4s"
@@ -525,7 +531,7 @@
   "colors": [
    "Red"
   ],
-  "type": "Fixed light",
+  "type": "Light on Pile",
   "place": "Sausalito Channel #2",
   "number": "2",
   "light": "Fl R 4s"
@@ -573,7 +579,7 @@
   "colors": [
    "Green"
   ],
-  "type": "Fixed light",
+  "type": "Light on Pile",
   "place": "Corte Madera Channel #7",
   "number": "7",
   "light": "Fl G 2.5s"
@@ -590,7 +596,7 @@
    "Yellow"
   ],
   "type": "Bell buoy",
-  "place": "SF North Traffic Lane #N",
+  "place": "SF North Traffic Lane",
   "number": "N",
   "light": "Fl Y 4s"
  },
@@ -705,7 +711,7 @@
    "Green"
   ],
   "type": "Buoy",
-  "place": "Preferred Channel #SC",
+  "place": "Preferred Channel",
   "number": "SC",
   "light": "Fl (2+1)G 6s"
  },
@@ -722,7 +728,7 @@
    "White"
   ],
   "type": "Whistle buoy",
-  "place": "SF Approach #SF",
+  "place": "SF Approach",
   "number": "SF",
   "light": "Mo (A) W"
  },
@@ -738,7 +744,7 @@
    "Yellow"
   ],
   "type": "Bell buoy",
-  "place": "SF South Traffic Lane #S",
+  "place": "SF South Traffic Lane",
   "number": "S",
   "light": "Fl Y 4s"
  },
@@ -768,15 +774,15 @@
    "Yellow"
   ],
   "type": "Gong buoy",
-  "place": "SF West Traffic Lane #W",
+  "place": "SF West Traffic Lane",
   "number": "W",
   "light": "Fl Y 2.5s"
  },
  {
   "id": "X",
   "name": "YRA-X",
-  "lat": 37.811667,
-  "lon": -122.443333,
+  "lat": 37.81111,
+  "lon": -122.44305,
   "desc": "Yellow/blue sphere 'X' Golden Gate Yacht Club",
   "nick": null,
   "group": "yra",
@@ -785,7 +791,8 @@
    "Blue"
   ],
   "type": "Sphere",
-  "place": "GGYC"
+  "place": "GGYC",
+  "pos_note": "Position from NOAA ENC (charted 'X'); community list had 37.81167, -122.44333"
  },
  {
   "id": "XOC",
@@ -1028,7 +1035,7 @@
    "White"
   ],
   "type": "Buoy",
-  "place": "Pillar Point Harbor Approach #PP",
+  "place": "Pillar Point Harbor Approach",
   "number": "PP",
   "light": "Mo (A) W"
  },
@@ -1261,8 +1268,8 @@
    "White",
    "Orange"
   ],
-  "type": "Fixed light",
-  "place": "Point Pinole #P",
+  "type": "Light on Pile",
+  "place": "Point Pinole",
   "number": "P",
   "light": "Fl W 2.5s"
  },
@@ -1277,7 +1284,7 @@
   "colors": [
    "Red"
   ],
-  "type": "Fixed light",
+  "type": "Light on Pile",
   "place": "Petaluma River Entrance #2",
   "number": "2",
   "light": "Fl R 2.5s"
@@ -1389,7 +1396,7 @@
   "colors": [
    "Red"
   ],
-  "type": "Fixed light",
+  "type": "Light on Pile",
   "place": "Richmond Harbor Channel #8",
   "number": "8",
   "light": "Fl R 6s"
@@ -1405,7 +1412,7 @@
   "colors": [
    "Red"
   ],
-  "type": "Fixed light",
+  "type": "Light on Pile",
   "place": "Redwood Creek Entrance #2",
   "number": "2",
   "light": "Q R"
@@ -1421,7 +1428,7 @@
   "colors": [
    "Green"
   ],
-  "type": "Fixed light",
+  "type": "Light on Pile",
   "place": "Redwood Creek Entrance #3",
   "number": "3",
   "light": "Fl G 4s"
@@ -1437,7 +1444,7 @@
   "colors": [
    "Red"
   ],
-  "type": "Fixed light",
+  "type": "Light on Pile",
   "place": "Redwood Creek Entrance #4",
   "number": "4",
   "light": "Fl R 2.5s"
@@ -1453,7 +1460,7 @@
   "colors": [
    "Red"
   ],
-  "type": "Fixed light",
+  "type": "Light on Pile",
   "place": "South Channel #12",
   "number": "12",
   "light": "Fl R 4s"
@@ -1495,7 +1502,7 @@
   "colors": [
    "Green"
   ],
-  "type": "Fixed light",
+  "type": "Light on Pile",
   "place": "San Bruno Shoal Channel #1",
   "number": "1",
   "light": "Fl G 4s"
@@ -1527,7 +1534,7 @@
   "colors": [
    "Red"
   ],
-  "type": "Fixed light",
+  "type": "Light on Pile",
   "place": "San Bruno Shoal Channel #4",
   "number": "4",
   "light": "Fl R 2.5s"
@@ -1543,7 +1550,7 @@
   "colors": [
    "Red"
   ],
-  "type": "Fixed light",
+  "type": "Light on Pile",
   "place": "San Bruno Shoal Channel #6",
   "number": "6",
   "light": "Fl R 4s"
@@ -1559,7 +1566,7 @@
   "colors": [
    "Red"
   ],
-  "type": "Fixed light",
+  "type": "Light on Pile",
   "place": "South Channel #8",
   "number": "8",
   "light": "Fl R 4s"
@@ -1590,7 +1597,7 @@
   "colors": [
    "Green"
   ],
-  "type": "Fixed light",
+  "type": "Light on Pile",
   "place": "North Channel #17",
   "number": "17",
   "light": "Fl G 4s"
@@ -1733,7 +1740,7 @@
   "colors": [
    "Red"
   ],
-  "type": "Fixed light",
+  "type": "Light on Pile",
   "place": "Treasure Island North End #6",
   "number": "6",
   "light": "Fl R 2.5s"

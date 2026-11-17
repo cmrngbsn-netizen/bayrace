@@ -37,12 +37,12 @@ const HEX = {Red: '#d32f2f', Green: '#2e7d32', Yellow: '#fbc02d', White: '#fffff
 const swatch = colors => !colors || !colors.length ? '#fff'
   : colors.length === 1 ? HEX[colors[0]] : `linear-gradient(${colors.length === 2 ? 'to right,' : ''}${colors.map((c, i) => `${HEX[c]} ${i / colors.length * 100}% ${(i + 1) / colors.length * 100}%`).join(',')})`;
 const BUOYISH = /buoy|inflatable|ball|sphere|column/i;
+const titleCase = s => (s || '').replace(/(^|[\s\-&/])([a-z])/g, (m, p, c) => p + c.toUpperCase());
+// e.g. "Green Buoy", "Red-Green-Red Banded Buoy", "Red & White Whistle Buoy".
 function looksLike(colors, type, short) {
-  const t = (type || '').toLowerCase();
-  if (!colors || !colors.length) return short ? type : BUOYISH.test(t) ? `${type} — color not given` : type || 'Color not given';
-  const c = colors.length === 3 && colors[0] === colors[2] ? `${colors.join('-').toLowerCase()} bands`.replace(/^./, s => s.toUpperCase())
-    : colors.length === 2 ? `${colors[0]} & ${colors[1].toLowerCase()}` : colors[0];
-  return t ? `${c} ${t}` : c;
+  if (!colors || !colors.length) return titleCase(short ? type : BUOYISH.test(type || '') ? `${type} — color not given` : type || 'Color not given');
+  const c = colors.length === 3 && colors[0] === colors[2] ? `${colors.join('-')} Banded` : colors.join(' & ');
+  return titleCase(type ? `${c} ${type}` : c);
 }
 // Popup card for a mark. info: {id, nick, place, colors, type, light, desc, lat, lng, org}; rows: extra HTML rows.
 function markCard(info, rows = '') {
