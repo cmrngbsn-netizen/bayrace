@@ -377,5 +377,24 @@
    "marks": ["17-S", "CG-S", "12-P", "Y-P"],
    "dist": 6.2
   }
- ]
+ ],
+ "conditions": {
+  "raceStart": "18:15",
+  "raceHours": 2.5,
+  "area": [37.855, -122.445],
+  "tide": {
+   "id": "9414290",
+   "name": "San Francisco (Golden Gate)"
+  },
+  "currents": [
+   {
+    "id": "SFB1212",
+    "name": "Raccoon Strait"
+   },
+   {
+    "id": "SFB1203",
+    "name": "Golden Gate Bridge"
+   }
+  ]
+ }
 }

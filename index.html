@@ -18,10 +18,17 @@
 <div id="map"></div>
 <div id="status" hidden></div>
 <button id="locate" aria-label="My location">◎</button>
+<button id="condbtn" type="button" hidden>Tides &amp; wind</button>
+<section id="cond" hidden aria-label="Tides and wind">
+ <header><h2>Tides &amp; wind</h2><button id="condclose" type="button" aria-label="Close">×</button></header>
+ <div id="conddays"></div>
+ <div id="condbody"></div>
+</section>
 <div id="coursebar" hidden><select id="course" aria-label="Course"></select><div id="summary"></div></div>
 <script src="lib/leaflet.js"></script>
 <script src="app.js"></script>
 <script src="land.js"></script>
 <script src="courses.js"></script>
+<script src="conditions.js"></script>
 </body>
 </html>
