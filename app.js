@@ -17,7 +17,7 @@ const BASEMAPS = {
 
 // zoomSnap 0.25 lets a course fill the screen instead of snapping to the next whole zoom level out.
 const map = L.map('map', {center: [37.83, -122.43], zoom: 12, zoomSnap: 0.25, zoomControl: false, layers: [BASEMAPS['Chart']]});
-L.control.zoom({position: 'topleft'}).addTo(map);
+if (!L.Browser.mobile) L.control.zoom({position: 'topleft'}).addTo(map);  // phones pinch; keep the map clear
 map.attributionControl.setPrefix(false);  // keep the credit line to one row on a phone
 
 // Surface tile failures so a blank map isn't a mystery.
@@ -66,7 +66,30 @@ const marksReady = fetch('data/marks.json').then(r => r.json()).then(marks => {
 }).catch(() => { status.textContent = 'Could not load marks'; status.hidden = false; return {}; });
 const showStatus = (msg, ms = 3000) => { status.textContent = msg; status.hidden = false; clearTimeout(errTimer); errTimer = setTimeout(() => status.hidden = true, ms); };
 
-L.control.layers(BASEMAPS, {'YRA marks': groups.yra, 'Other / club marks': groups.other}, {position: 'topright'}).addTo(map);
+// Layer picker, inside the bottom card (Leaflet's own control sat under other buttons on phones).
+// Chosen = filled button, not chosen = outlined.
+const OVERLAYS = {'YRA marks': groups.yra, 'Club marks': groups.other};
+const layersEl = document.getElementById('layers'), layerBtn = document.getElementById('layerbtn');
+let base = 'Chart';
+function drawLayers() {
+  layersEl.innerHTML = `<div class="lrow"><span>Map</span>${Object.keys(BASEMAPS).map(n => `<button type="button" class="btn${n === base ? '' : ' alt'}" data-base="${n}">${n}</button>`).join('')}</div>`
+    + `<div class="lrow"><span>Marks</span>${Object.entries(OVERLAYS).map(([n, g]) => `<button type="button" class="btn${map.hasLayer(g) ? '' : ' alt'}" aria-pressed="${map.hasLayer(g)}" data-ov="${n}">${n}</button>`).join('')}</div>`;
+}
+const showLayers = on => {
+  if (layersEl.hidden === !on) return;
+  layersEl.hidden = !on; layerBtn.setAttribute('aria-expanded', on);
+  if (on) drawLayers();
+  placeLabels();  // courses.js: the card changed height, keep labels clear of it
+};
+layerBtn.onclick = () => showLayers(layersEl.hidden);
+map.on('click', () => showLayers(false));
+layersEl.onclick = e => {
+  const b = e.target.closest('button');
+  if (!b) return;
+  if (b.dataset.base) { map.removeLayer(BASEMAPS[base]); base = b.dataset.base; map.addLayer(BASEMAPS[base]); }
+  if (b.dataset.ov) { const g = OVERLAYS[b.dataset.ov]; map.hasLayer(g) ? map.removeLayer(g) : map.addLayer(g); }
+  drawLayers();
+};
 
 // Hide labels when zoomed far out so the Bay isn't a wall of text.
 const setLabels = () => document.getElementById('map').classList.toggle('nolabels', map.getZoom() < 11);

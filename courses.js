@@ -18,7 +18,7 @@ const nm = (a, b) => {  // flat-earth distance in nm; plenty accurate across the
 const pathNm = p => p.slice(1).reduce((s, b, i) => s + nm(p[i], b), 0);
 
 const courseLayer = L.layerGroup().addTo(map), leaderLayer = L.layerGroup().addTo(map), arrowLayer = L.layerGroup().addTo(map);
-const bar = document.getElementById('coursebar');
+const bar = document.getElementById('coursebar'), dock = document.getElementById('dock');  // dock: the bottom card, covers the map
 const select = document.getElementById('course');
 const summary = document.getElementById('summary');
 let event, marksById, current, hiddenGroups = null, drawn = null;
@@ -117,7 +117,7 @@ function draw(no) {
     + `<div class="dist">${total.toFixed(1)} nm <span>(SI ~${current.dist} nm)</span>${unplaced.length ? ` · <span class="warn">approx: ${unplaced.join(', ')}</span>` : ''}`
     + `${offLand ? '' : ' · <span class="warn">a leg may cross land</span>'}</div>`;
   drawn = {legs: [...legs.values()], marks, sf: start, seq};
-  map.fitBounds(L.latLngBounds([...legs.values()].flatMap(l => l.path)), {paddingTopLeft: [30, 60], paddingBottomRight: [30, bar.offsetHeight + 30], maxZoom: 15});
+  map.fitBounds(L.latLngBounds([...legs.values()].flatMap(l => l.path)), {paddingTopLeft: [30, 60], paddingBottomRight: [30, dock.offsetHeight + 30], maxZoom: 15});
   placeLabels();
 }
 
@@ -141,14 +141,14 @@ function placeLabels() {
   if (!drawn) return;
   const pt = ll => map.latLngToContainerPoint(ll), size = map.getSize();
   layLanes(pt);
-  const view = {x0: 4, y0: 50, x1: size.x - 4, y1: size.y - bar.offsetHeight - 30};  // clear of controls and course bar
+  const view = {x0: 4, y0: 50, x1: size.x - 4, y1: size.y - dock.offsetHeight - 30};  // clear of the status bar and the bottom card
   const segs = drawn.legs.flatMap(l => l.lanes.flatMap(n => n.P.slice(1).map((b, i) => [n.P[i], b])));
   const taken = [...drawn.marks.map(m => pt(m.pos)), pt(drawn.sf)].map(p => ({x0: p.x - 16, y0: p.y - 13, x1: p.x + 16, y1: p.y + 13}));
   const score = (b, lineCost) => {
     let s = 0;
     for (const t of taken) if (boxesHit(b, t)) s += 100;
     for (const [p, q] of segs) if (segHitsBox(p, q, b)) s += lineCost;
-    if (b.x0 < 4 || b.y0 < 50 || b.x1 > size.x - 4 || b.y1 > size.y - bar.offsetHeight - 30) s += 300;  // off screen or under the controls
+    if (b.x0 < 4 || b.y0 < 50 || b.x1 > size.x - 4 || b.y1 > size.y - dock.offsetHeight - 30) s += 300;  // off screen or under the controls
     return s;
   };
 
@@ -336,7 +336,7 @@ function popup(id, side, order) {
   el.innerHTML = markCard(info(id),
     `<div class="cr"><span>Rounding</span><b class="${SIDE[side]}">Leave to ${side === 'P' ? 'port' : 'starboard'}</b> · ${order.map(nth).join(' & ')} mark</div>`
     + (em.approx ? `<div class="cr warn"><span>Position</span>${isPlaced ? 'Placed by you on this device' : 'Approximate'} — drag the dot to move it</div>` : ''))
-    + (isPlaced ? '<button type="button">Reset position</button>' : '');
+    + (isPlaced ? '<button type="button" class="btn alt">Reset position</button>' : '');
   const btn = el.querySelector('button');
   if (btn) btn.onclick = () => { store.set(`pos:${event.id}:${id}`, null); map.closePopup(); draw(current.no); };
   return el;

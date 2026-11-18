@@ -114,10 +114,10 @@ const conditions = (() => {
     const stop = stops.find(s => s.a === picked);
     const {start, end} = span();
     when.innerHTML = `<div class="trow"><span>${date.toLocaleDateString(undefined, {weekday: 'long', month: 'short', day: 'numeric'})}</span>`
-      + `<button type="button" class="trange" aria-expanded="${editing}">${start}–${end} <span aria-hidden="true">✎</span></button></div>`
+      + `<button type="button" class="btn${editing ? '' : ' alt'} trange" aria-expanded="${editing}">${start}–${end} <span aria-hidden="true">✎</span></button></div>`
       + `<div class="tedit"${editing ? '' : ' hidden'}><label>Start <input type="time" step="300" data-k="start" value="${start}"></label>`
-      + `<label>End <input type="time" step="300" data-k="end" value="${end}"></label>${store.get('raceWindow') ? '<button type="button" class="treset">Reset</button>' : ''}</div>`;
-    places.innerHTML = stops.map(s => `<button type="button" class="${s.a === picked ? 'on' : ''}">${s.a.name}</button>`).join('');
+      + `<label>End <input type="time" step="300" data-k="end" value="${end}"></label>${store.get('raceWindow') ? '<button type="button" class="btn alt treset">Reset</button>' : ''}</div>`;
+    places.innerHTML = stops.map(s => `<button type="button" class="btn${s.a === picked ? '' : ' alt'}" aria-pressed="${s.a === picked}">${s.a.name}</button>`).join('');
     places.querySelectorAll('button').forEach((b, i) => b.onclick = () => { picked = stops[i].a; load(); });
     body.innerHTML = '<p class="cmuted">Loading…</p>';
     const [cur, wind, tide] = await Promise.all([currentAt(picked.current, d), windAt(picked.at),

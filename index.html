@@ -17,15 +17,22 @@
 <body>
 <div id="map"></div>
 <div id="status" hidden></div>
-<button id="locate" aria-label="My location">◎</button>
-<button id="condbtn" type="button" hidden>Tides &amp; Wind</button>
 <section id="cond" hidden aria-label="Tides and Wind">
- <header><h2>Tides &amp; Wind</h2><button id="condclose" type="button" aria-label="Close">×</button></header>
+ <header><h2>Tides &amp; Wind</h2><button id="condclose" class="btn alt icon" type="button" aria-label="Close">×</button></header>
  <div id="condwhen"></div>
  <div id="condplaces" role="group" aria-label="Place on the course"></div>
  <div id="condbody"></div>
 </section>
-<div id="coursebar" hidden><div class="cbrow"><select id="course" aria-label="Course"></select><button id="play" type="button" hidden aria-label="Sail the course">▶</button></div><div id="summary"></div></div>
+<!-- every control lives in this one card at the bottom, so the map above stays clear -->
+<div id="dock">
+ <div id="layers" hidden role="group" aria-label="Map layers"></div>
+ <div id="coursebar" hidden><div class="cbrow"><select id="course" aria-label="Course"></select><button id="play" class="btn icon" type="button" hidden aria-label="Sail the course">▶</button></div><div id="summary"></div></div>
+ <div class="tools">
+  <button id="condbtn" class="btn" type="button" hidden>Tides &amp; Wind</button>
+  <button id="layerbtn" class="btn" type="button" aria-expanded="false">Layers</button>
+  <button id="locate" class="btn icon" type="button" aria-label="My location">◎</button>
+ </div>
+</div>
 <script src="lib/leaflet.js"></script>
 <script src="app.js"></script>
 <script src="land.js"></script>
