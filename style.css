@@ -14,7 +14,15 @@ html,body{margin:0;height:100%;background:#0b2a3d;-webkit-user-select:none;user-
 /* Course bar, course marks and legs */
 #coursebar{position:absolute;left:10px;right:68px;bottom:calc(22px + env(safe-area-inset-bottom));z-index:1000;background:#fffffff2;border-radius:12px;box-shadow:0 1px 6px #0006;padding:8px 10px;font:14px -apple-system,system-ui,sans-serif;color:#111}
 #coursebar[hidden]{display:none}
-#course{width:100%;font-size:16px;padding:6px;border:1px solid #bbb;border-radius:8px;background:#fff;color:#111}
+.cbrow{display:flex;gap:8px;align-items:center}
+#play{flex:none;width:40px;height:36px;border:0;border-radius:8px;background:#0b2a3d;color:#fff;font:16px system-ui;padding:0}
+#play[hidden]{display:none}
+#summary .now{background:#eb683433;border-radius:4px;box-shadow:0 0 0 2px #eb683433}
+.boat{background:none;border:0}
+.boat svg{position:absolute;left:-11px;top:-15px;width:22px;height:30px;overflow:visible}
+.boat .hull{fill:#fff;stroke:#0b2a3d;stroke-width:1.6}
+.boat .sail{fill:#eb6834;stroke:#0b2a3d;stroke-width:1}
+#course{flex:1;min-width:0;width:100%;font-size:16px;padding:6px;border:1px solid #bbb;border-radius:8px;background:#fff;color:#111}
 #summary:empty{display:none}
 #summary .seq{margin-top:6px;font-weight:600;line-height:1.5}
 #summary .dist{margin-top:2px;color:#444}

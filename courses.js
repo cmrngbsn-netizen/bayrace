@@ -42,6 +42,7 @@ function info(id) {
 const placed = id => !!store.get(`pos:${event.id}:${id}`);
 
 function draw(no) {
+  stopPlay();
   courseLayer.clearLayers();
   leaderLayer.clearLayers();
   arrowLayer.clearLayers();
@@ -51,6 +52,7 @@ function draw(no) {
   // Hide the mark layers while a course is up; restore only the ones that were showing.
   if (current && !hiddenGroups) { hiddenGroups = [groups.yra, groups.other].filter(g => map.hasLayer(g)); hiddenGroups.forEach(g => map.removeLayer(g)); }
   if (!current && hiddenGroups) { hiddenGroups.forEach(g => map.addLayer(g)); hiddenGroups = null; }
+  playBtn.hidden = !current;
   if (!current) { summary.textContent = ''; return; }
 
   const rounds = current.marks.map((t, i) => { const [id, side] = t.split('-'); return {id, side, n: i + 1, pos: markPos(id)}; });
@@ -61,7 +63,7 @@ function draw(no) {
 
   // Legs, routed around land. A leg sailed more than once is drawn once per direction; where
   // lines would lie on top of each other, placeLabels splits them into side-by-side lanes.
-  const legs = new Map();
+  const legs = new Map(), seq = [];  // seq: the legs in sailing order, for Play
   let total = 0, offLand = true;
   stops.slice(1).forEach((b, i) => {
     const a = stops[i];
@@ -76,6 +78,7 @@ function draw(no) {
     }
     const d = a.id === leg.from ? 1 : -1;
     if (!leg.dirs.has(d)) leg.dirs.set(d, i);
+    seq.push({leg, d, to: i});
     total += leg.dist;
   });
   legs.forEach(leg => {
@@ -110,10 +113,10 @@ function draw(no) {
     .bindPopup(`<div class="card"><div class="ct">Start / Finish</div><div class="cd">${event.start.desc}</div><div class="cd">${event.finish.desc}</div></div>`).addTo(courseLayer);
 
   const unplaced = Object.keys(byId).filter(id => (event.marks[id] || {}).approx && !placed(id));
-  summary.innerHTML = `<div class="seq">Start → ${rounds.map(r => `<span class="${SIDE[r.side]}">${r.id} ${r.side}</span>`).join(' → ')} → Finish</div>`
+  summary.innerHTML = `<div class="seq">Start → ${rounds.map((r, i) => `<span class="${SIDE[r.side]}" data-i="${i}">${r.id} ${r.side}</span>`).join(' → ')} → <span data-i="${rounds.length}">Finish</span></div>`
     + `<div class="dist">${total.toFixed(1)} nm <span>(SI ~${current.dist} nm)</span>${unplaced.length ? ` · <span class="warn">approx: ${unplaced.join(', ')}</span>` : ''}`
     + `${offLand ? '' : ' · <span class="warn">a leg may cross land</span>'}</div>`;
-  drawn = {legs: [...legs.values()], marks, sf: start};
+  drawn = {legs: [...legs.values()], marks, sf: start, seq};
   map.fitBounds(L.latLngBounds([...legs.values()].flatMap(l => l.path)), {paddingTopLeft: [30, 60], paddingBottomRight: [30, bar.offsetHeight + 30], maxZoom: 15});
   placeLabels();
 }
@@ -276,6 +279,55 @@ function layLanes(pt) {
 }
 map.on('moveend', placeLabels);  // after zooms and pans (including fitBounds' own animation)
 window.addEventListener('resize', () => setTimeout(placeLabels, 100));
+
+// ---- Play: a boat sails the course in order, leaving a trail, pausing at each mark ----
+const playBtn = document.getElementById('play'), playLayer = L.layerGroup().addTo(map);
+const PAUSE = 0.6;  // s at each mark
+let playing = null;
+function stopPlay() {
+  if (!playing) return;
+  cancelAnimationFrame(playing.raf);
+  playLayer.clearLayers();
+  summary.querySelectorAll('.now').forEach(e => e.classList.remove('now'));
+  playing = null;
+  playBtn.textContent = '▶'; playBtn.setAttribute('aria-label', 'Sail the course');
+}
+function play() {
+  if (playing) return stopPlay();
+  if (!drawn || !drawn.seq.length) return;
+  const Z = 17, P = ll => map.project(ll, Z), U = p => map.unproject(p, Z);  // fixed-zoom pixels: unaffected by pan/zoom while playing
+  const legs = drawn.seq.map(({leg, d, to}) => {
+    const pts = leg.lanes.find(n => n.d === d).line.getLatLngs().map(P), lens = pts.slice(1).map((b, i) => b.distanceTo(pts[i]));
+    return {pts, lens, len: lens.reduce((a, b) => a + b, 0), to};
+  });
+  const total = legs.reduce((a, l) => a + l.len, 0), speed = total / Math.min(20, Math.max(8, 2.5 * legs.length));  // px/s
+  const trail = L.polyline([], {color: '#eb6834', weight: 4, opacity: 0.9, interactive: false}).addTo(playLayer);
+  const boat = L.marker(U(legs[0].pts[0]), {interactive: false, keyboard: false, zIndexOffset: 2000, icon: L.divIcon({className: 'boat', iconSize: [0, 0],
+    html: '<svg viewBox="-10 -14 20 28"><path class="hull" d="M0,-13 C6,-6 6,6 4,12 L-4,12 C-6,6 -6,-6 0,-13 Z"/><path class="sail" d="M0,-9 L0,8 C5,3 5,-4 0,-9 Z"/></svg>'})}).addTo(playLayer);
+  const svg = () => boat.getElement() && boat.getElement().firstChild;
+  const at = (l, dist) => {  // point and heading `dist` px along leg l
+    let i = 0;
+    while (i < l.lens.length - 1 && dist > l.lens[i]) dist -= l.lens[i++];
+    const a = l.pts[i], b = l.pts[i + 1], f = Math.min(1, dist / (l.lens[i] || 1));
+    return {p: L.point(a.x + (b.x - a.x) * f, a.y + (b.y - a.y) * f), ang: Math.atan2(b.x - a.x, a.y - b.y) * 180 / Math.PI, i};
+  };
+  const t0 = performance.now();
+  playing = {};
+  playBtn.textContent = '■'; playBtn.setAttribute('aria-label', 'Stop');
+  const frame = now => {
+    let t = (now - t0) / 1000, k = 0;
+    while (k < legs.length && t > legs[k].len / speed + PAUSE) t -= legs[k++].len / speed + PAUSE;
+    if (k >= legs.length) { playing.raf = requestAnimationFrame(() => setTimeout(stopPlay, 800)); return; }
+    const l = legs[k], {p, ang, i} = at(l, Math.min(l.len, t * speed));
+    boat.setLatLng(U(p));
+    if (svg()) svg().style.transform = `rotate(${ang}deg)`;
+    trail.setLatLngs([...legs.slice(0, k).flatMap(m => m.pts), ...l.pts.slice(0, i + 1), p].map(U));
+    summary.querySelectorAll('[data-i]').forEach(e => e.classList.toggle('now', +e.dataset.i === l.to));
+    playing.raf = requestAnimationFrame(frame);
+  };
+  playing.raf = requestAnimationFrame(frame);
+}
+playBtn.onclick = play;
 
 function popup(id, side, order) {
   const em = event.marks[id] || {}, isPlaced = placed(id);
