@@ -198,8 +198,9 @@ function placeLabels() {
     res.items.filter(o => o.best.s >= 100).forEach(o => o.el.classList.add('mini'));
     res = placeMarks(true);
   }
+  // Leaders: gray dotted, so they don't read as part of the course.
   leaderLayer.clearLayers();
-  res.leaders.forEach(([ll, p]) => L.polyline([ll, map.containerPointToLatLng(L.point(p.x, p.y))], {color: '#0b2a3d', weight: 2, opacity: 0.9, interactive: false}).addTo(leaderLayer));
+  res.leaders.forEach(([ll, p]) => L.polyline([ll, map.containerPointToLatLng(L.point(p.x, p.y))], {color: '#5b6b78', weight: 2, opacity: 0.8, dashArray: '0.1 5', lineCap: 'round', interactive: false}).addTo(leaderLayer));
 
   drawn.legs.forEach(leg => {
     const el = leg.tag.getElement(), lt = el.firstChild, P = leg.path.map(pt);
