@@ -26,10 +26,12 @@
 <!-- every control lives in this one card at the bottom, so the map above stays clear -->
 <div id="dock">
  <div id="layers" hidden role="group" aria-label="Map layers"></div>
+ <div id="timer" hidden role="group" aria-label="Start countdown"></div>
  <div id="coursebar" hidden><div class="cbrow"><select id="event" aria-label="Event"></select><select id="course" aria-label="Course"></select><button id="play" class="btn icon" type="button" hidden aria-label="Sail the course">▶</button></div><div id="summary"></div></div>
  <div class="tools">
   <button id="condbtn" class="btn" type="button" hidden>Tides &amp; Wind</button>
   <button id="layerbtn" class="btn" type="button" aria-expanded="false">Layers</button>
+  <button id="timerbtn" class="btn icon" type="button" aria-expanded="false" aria-label="Start countdown">⏱</button>
   <button id="locate" class="btn icon" type="button" aria-label="My location">◎</button>
  </div>
 </div>
@@ -38,5 +40,6 @@
 <script src="land.js"></script>
 <script src="courses.js"></script>
 <script src="conditions.js"></script>
+<script src="timer.js"></script>
 </body>
 </html>

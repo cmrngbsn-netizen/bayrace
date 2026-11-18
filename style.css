@@ -15,10 +15,10 @@ html,body{margin:0;height:100%;background:#0b2a3d;-webkit-user-select:none;user-
 .btn.icon{width:38px;padding:0;font-size:18px;flex:none}
 .btn[hidden]{display:none}
 #dock{position:absolute;left:10px;right:10px;bottom:calc(22px + env(safe-area-inset-bottom));z-index:1000;max-width:440px;background:#fffffff2;border-radius:14px;box-shadow:0 1px 6px #0006;padding:10px;display:flex;flex-direction:column;gap:8px;font:14px -apple-system,system-ui,sans-serif;color:#111}
-#coursebar[hidden],#layers[hidden]{display:none}
+#coursebar[hidden],#layers[hidden],#timer[hidden]{display:none}
 .tools{display:flex;gap:8px}
 .tools .btn:not(.icon){flex:1}
-#layers{display:flex;flex-direction:column;gap:8px;padding-bottom:8px;border-bottom:1px solid #e4e3de}
+#layers,#timer{display:flex;flex-direction:column;gap:8px;padding-bottom:8px;border-bottom:1px solid #e4e3de}
 .lrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
 .lrow span{width:48px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:#52514e}
 .lrow .btn{height:34px;padding:0 12px;font-size:14px}
@@ -122,3 +122,9 @@ html,body{margin:0;height:100%;background:#0b2a3d;-webkit-user-select:none;user-
 .chart .wdir{font:600 10px system-ui;fill:#33322f}
 .chart .tip{position:absolute;top:18px;background:#0b0b0bea;color:#fff;font:12px/1.45 system-ui;padding:6px 8px;border-radius:6px;pointer-events:none;white-space:nowrap}
 .csrc{margin-top:18px;font-size:12px}
+/* start countdown */
+#timerbtn{flex:none;padding:0 10px;font-variant-numeric:tabular-nums}
+#timerbtn.soon{background:#eb6834;border-color:#eb6834}
+#timer input{height:34px;font:16px system-ui;padding:0 6px;border:1.5px solid #c9c8c2;border-radius:8px;background:#fff;color:#111}
+#timer .tbig{font:700 34px -apple-system,system-ui,sans-serif;font-variant-numeric:tabular-nums;color:#0b2a3d;line-height:1.1}
+#timer .tbig small{display:block;font:13px -apple-system,system-ui,sans-serif;color:#52514e;margin-top:2px}

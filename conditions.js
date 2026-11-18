@@ -248,5 +248,11 @@ const conditions = (() => {
     cfg = event.conditions; btn.hidden = !cfg;
     setTimeout(() => panel.hidden || !cfg || load());  // after courses.js has drawn the new course
   });
-  return {open};
+  // For the start countdown (timer.js): the race window, and moving its start (the length stays).
+  const setStart = t => {
+    const {start, end} = span(), len = (hourOf('x ' + end) - hourOf('x ' + start) + 24) % 24 || cfg.raceHours;
+    store.set(win(), t ? {start: t, end: hm(Math.min(hourOf('x ' + t) + len, 23 + 59 / 60))} : null);
+    panel.hidden || load();
+  };
+  return {open, span: () => cfg && span(), setStart, custom: () => !!store.get(win())};
 })();
