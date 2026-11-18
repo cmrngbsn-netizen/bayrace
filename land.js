@@ -121,7 +121,34 @@ const land = (() => {
     return out;
   }
 
+  // Rounding a whole island (e.g. "Angel s"): the path that keeps it on the given side, going from
+  // prev to next. Uses the island's convex hull pushed ROUND nm out: the boat comes in on the
+  // tangent from prev, follows the hull, and leaves on the tangent to next. Returns
+  // {entry, arc: [LatLng]} (arc starts at entry), or null if markLL isn't on an island.
+  const ROUND = 0.1;
+  function roundIsland(markLL, prevLL, nextLL, side) {
+    const ri = [...ringsAt(toXY(markLL))][0];
+    if (ri === undefined) return null;
+    const pts = [...rings[ri]].sort((a, b) => a.x - b.x || a.y - b.y), lo = [], hi = [];  // monotone chain, CCW
+    for (const p of pts) { while (lo.length > 1 && cross(lo[lo.length - 2], lo[lo.length - 1], p) <= 0) lo.pop(); lo.push(p); }
+    for (const p of pts.reverse()) { while (hi.length > 1 && cross(hi[hi.length - 2], hi[hi.length - 1], p) <= 0) hi.pop(); hi.push(p); }
+    const h0 = [...lo.slice(0, -1), ...hi.slice(0, -1)], n = h0.length;
+    const H = h0.map((v, i) => {
+      const a = h0[(i - 1 + n) % n], b = h0[(i + 1) % n];
+      const n1 = norm(v.y - a.y, a.x - v.x), n2 = norm(b.y - v.y, v.x - b.x), m = norm(n1.x + n2.x, n1.y + n2.y);  // outward for CCW
+      return {x: v.x + m.x * ROUND, y: v.y + m.y * ROUND};
+    });
+    // Starboard: island on the right = clockwise = down the CCW hull. sgn flips the tests for port.
+    const sgn = side === 'S' ? 1 : -1, P = toXY(prevLL), N = toXY(nextLL);
+    const rightOf = (o, a) => H.every(p => sgn * cross(o, a, p) <= 1e-9);
+    let e = H.findIndex(v => rightOf(P, v)), x = H.findIndex(v => rightOf(v, N));
+    if (e < 0 || x < 0) return null;  // prev or next is inside the hull
+    const arc = [H[e]];
+    for (let i = e; i !== x;) { i = (i - sgn + n) % n; arc.push(H[i]); }
+    return {entry: toLL(H[e]), arc: arc.map(toLL)};
+  }
+
   ready = fetch('data/coast.json').then(r => r.json()).then(build).catch(() => showStatus('Coastline unavailable — legs drawn straight', 5000));
   const check = buf => (a, b) => blocked(toXY(a), toXY(b), new Set([...ringsAt(toXY(a)), ...ringsAt(toXY(b))]), buf);
-  return {ready, route, crossesLand: check(0), hugsCoast: check(BUF)};
+  return {ready, route, roundIsland, crossesLand: check(0), hugsCoast: check(BUF)};
 })();

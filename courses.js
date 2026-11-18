@@ -3,7 +3,8 @@
 // Event files (data/events/*.json): marks table maps the SI's mark ids to a YRA/club mark ("ref")
 // or to an approximate position (inflatables, wind marks); courses list marks as "ID-P"/"ID-S".
 // Mark entries may override nick/colors/type/place/desc of the referenced mark.
-const EVENT_URL = 'data/events/cyc-fnr-2026.json';
+// An island mark ("island": true) is the whole island, rounded on the given side.
+const EVENT_URLS = ['data/events/cyc-fnr-2026.json', 'data/events/yra-dh-midwinter-2027.json'];
 const SIDE = {P: 'port', S: 'stbd'}, SIDE_WORD = {P: 'PORT', S: 'STBD'};
 
 const store = {  // per-device conveniences; the app must work when storage is unavailable
@@ -19,9 +20,9 @@ const pathNm = p => p.slice(1).reduce((s, b, i) => s + nm(p[i], b), 0);
 
 const courseLayer = L.layerGroup().addTo(map), leaderLayer = L.layerGroup().addTo(map), arrowLayer = L.layerGroup().addTo(map);
 const bar = document.getElementById('coursebar'), dock = document.getElementById('dock');  // dock: the bottom card, covers the map
-const select = document.getElementById('course');
+const select = document.getElementById('course'), eventSel = document.getElementById('event');
 const summary = document.getElementById('summary');
-let event, marksById, current, hiddenGroups = null, drawn = null;
+let event, events, marksById, current, hiddenGroups = null, drawn = null;
 
 // Position of an event mark: user-placed > event table > referenced YRA/club mark.
 function markPos(id) {
@@ -48,7 +49,7 @@ function draw(no) {
   arrowLayer.clearLayers();
   drawn = null;
   current = event.courses.find(c => c.no === no);
-  store.set('course', current ? current.no : null);
+  store.set(`course:${event.id}`, current ? current.no : null);
   // Hide the mark layers while a course is up; restore only the ones that were showing.
   if (current && !hiddenGroups) { hiddenGroups = [groups.yra, groups.other].filter(g => map.hasLayer(g)); hiddenGroups.forEach(g => map.removeLayer(g)); }
   if (!current && hiddenGroups) { hiddenGroups.forEach(g => map.addLayer(g)); hiddenGroups = null; }
@@ -60,20 +61,24 @@ function draw(no) {
   if (missing.length) showStatus(`No position for mark ${missing.join(', ')}`, 5000);
   const start = L.latLng(event.start.lat, event.start.lon), finish = L.latLng(event.finish.lat, event.finish.lon);
   const stops = [{id: 'SF', pos: start}, ...rounds.filter(r => r.pos), {id: 'SF', pos: finish}];
+  // An island stop ends the leg in at the island and starts the leg out with the way around it.
+  const isle = stops.map((s, i) => (event.marks[s.id] || {}).island && land.roundIsland(s.pos, stops[i - 1].pos, stops[i + 1].pos, s.side));
 
   // Legs, routed around land. A leg sailed more than once is drawn once per direction; where
   // lines would lie on top of each other, placeLabels splits them into side-by-side lanes.
   const legs = new Map(), seq = [];  // seq: the legs in sailing order, for Play
   let total = 0, offLand = true;
   stops.slice(1).forEach((b, i) => {
-    const a = stops[i];
+    const a = stops[i], ai = isle[i], bi = isle[i + 1];
     if (nm(a.pos, b.pos) < 0.01) return;
-    const key = [a.id, b.id].sort().join('|');
+    // Legs to or from an island are its own (the way around depends on where the boat comes from).
+    const key = ai || bi ? `${i}` : [a.id, b.id].sort().join('|');
     let leg = legs.get(key);
     if (!leg) {
-      const r = land.route(a.pos, b.pos);
+      const r = land.route(ai ? ai.arc[ai.arc.length - 1] : a.pos, bi ? bi.entry : b.pos);
       offLand = offLand && r.ok;
-      leg = {from: a.id, path: r.path, dist: pathNm(r.path), dirs: new Map()};  // direction → first leg number
+      const path = ai ? [...ai.arc, ...r.path.slice(1)] : r.path;
+      leg = {from: a.id, path, dist: pathNm(path), dirs: new Map()};  // direction → first leg number
       legs.set(key, leg);
     }
     const d = a.id === leg.from ? 1 : -1;
@@ -95,7 +100,7 @@ function draw(no) {
   rounds.filter(r => r.pos).forEach(r => (byId[r.id] = byId[r.id] || {...r, order: []}).order.push(r.n));
   const marks = Object.values(byId).map(r => {
     const em = event.marks[r.id] || {}, inf = info(r.id), approx = !!em.approx, unplaced = approx && !placed(r.id);
-    const sw = `<span class="sw${inf.colors && inf.colors.length ? '' : ' unk'}" style="background:${swatch(inf.colors)}"></span>`;
+    const sw = em.island ? '' : `<span class="sw${inf.colors && inf.colors.length ? '' : ' unk'}" style="background:${swatch(inf.colors)}"></span>`;
     const dot = L.marker(r.pos, {draggable: approx, keyboard: false, zIndexOffset: 1000, icon: L.divIcon({iconSize: [0, 0],
       className: `cdot${approx ? ' approx' : ''}`, html: `<span style="background:${swatch(inf.colors)}"></span>`})}).addTo(courseLayer);
     const tag = L.marker(r.pos, {keyboard: false, zIndexOffset: 900, icon: L.divIcon({className: 'mtag', iconSize: [0, 0],
@@ -116,7 +121,7 @@ function draw(no) {
   summary.innerHTML = `<div class="seq">Start → ${rounds.map((r, i) => `<span class="${SIDE[r.side]}" data-i="${i}">${r.id} ${r.side}</span>`).join(' → ')} → <span data-i="${rounds.length}">Finish</span></div>`
     + `<div class="dist">${total.toFixed(1)} nm <span>(SI ~${current.dist} nm)</span>${unplaced.length ? ` · <span class="warn">approx: ${unplaced.join(', ')}</span>` : ''}`
     + `${offLand ? '' : ' · <span class="warn">a leg may cross land</span>'}</div>`;
-  drawn = {legs: [...legs.values()], marks, sf: start, seq};
+  drawn = {legs: [...legs.values()], marks, sf: start, seq, refit: 2};
   map.fitBounds(L.latLngBounds([...legs.values()].flatMap(l => l.path)), {paddingTopLeft: [30, 60], paddingBottomRight: [30, dock.offsetHeight + 30], maxZoom: 15});
   placeLabels();
 }
@@ -137,8 +142,9 @@ const segHitsBox = (p, q, b) => {  // Liang-Barsky clip of segment p-q against b
 const boxesHit = (a, b) => a.x0 < b.x1 && b.x0 < a.x1 && a.y0 < b.y1 && b.y0 < a.y1;
 const grow = (b, m) => ({x0: b.x0 - m, y0: b.y0 - m, x1: b.x1 + m, y1: b.y1 + m});
 
+// Returns false if mark labels still collide.
 function placeLabels() {
-  if (!drawn) return;
+  if (!drawn) return true;
   const pt = ll => map.latLngToContainerPoint(ll), size = map.getSize();
   layLanes(pt);
   const view = {x0: 4, y0: 50, x1: size.x - 4, y1: size.y - dock.offsetHeight - 30};  // clear of the status bar and the bottom card
@@ -219,6 +225,7 @@ function placeLabels() {
     lt.style.transform = `translate(${best.bx.x0 - anchor.x}px,${best.bx.y0 - anchor.y}px)`;
     taken.push(best.bx);
   });
+  return res.worst < 100;
 }
 // Lanes: each leg direction is drawn on its own line. Where two lines would run within a few
 // pixels of each other, each moves off to its right (the later of two same-way legs further),
@@ -289,7 +296,10 @@ function layLanes(pt) {
     });
   });
 }
-map.on('moveend', placeLabels);  // after zooms and pans (including fitBounds' own animation)
+// After zooms and pans (including fitBounds' own animation). If labels still collide once a new
+// course is fitted, zoom out a notch, at most twice; never after that, so the user's zoom stands.
+map.on('moveend', () => { if (!placeLabels() && drawn && drawn.refit-- > 0) map.zoomOut(0.25); else if (drawn) drawn.refit = 0; });
+map.on('dragstart', () => drawn && (drawn.refit = 0));
 window.addEventListener('resize', () => setTimeout(placeLabels, 100));
 
 // ---- Play: a boat sails the course in order, leaving a trail, pausing at each mark ----
@@ -354,13 +364,24 @@ function popup(id, side, order) {
   return el;
 }
 
-Promise.all([marksReady, fetch(EVENT_URL).then(r => r.json()), land.ready]).then(([byId, ev]) => {
-  marksById = byId; event = ev;
+// Switch to an event: fill the course list, put back the course last shown for it.
+function useEvent(ev) {
+  event = ev;
+  store.set('event', ev.id);
+  eventSel.value = ev.id;
   const sections = [...new Set(ev.courses.map(c => c.section))];
-  select.innerHTML = `<option value="">${ev.name} — choose course</option>` + sections.map(s =>
-    `<optgroup label="${s}">${ev.courses.filter(c => c.section === s).map(c => `<option value="${c.no}">Course ${c.no} — ${c.dist} nm</option>`).join('')}</optgroup>`).join('');
+  select.innerHTML = '<option value="">Course</option>' + sections.map(s =>
+    `<optgroup label="${s}">${ev.courses.filter(c => c.section === s).map(c => `<option value="${c.no}">Course ${c.no}</option>`).join('')}</optgroup>`).join('');
+  const last = store.get(`course:${ev.id}`) ?? (ev.id === 'cyc-fnr-2026' ? store.get('course') : null);  // 'course': before there were events
+  select.value = last && ev.courses.some(c => c.no === last) ? last : '';
+  select.dispatchEvent(new Event('change'));  // draws it; conditions.js follows along
+}
+
+Promise.all([marksReady, Promise.all(EVENT_URLS.map(u => fetch(u).then(r => r.json()))), land.ready]).then(([byId, evs]) => {
+  marksById = byId; events = evs;
+  eventSel.innerHTML = evs.map(e => `<option value="${e.id}">${e.short}</option>`).join('');
+  eventSel.onchange = () => useEvent(evs.find(e => e.id === eventSel.value));
   select.onchange = () => draw(select.value);
   bar.hidden = false;  // before drawing: the fit leaves room for the bar
-  const last = store.get('course');
-  if (last && ev.courses.some(c => c.no === last)) { select.value = last; draw(last); }
+  useEvent(evs.find(e => e.id === store.get('event')) || evs[0]);
 }).catch(() => showStatus('Could not load courses', 5000));

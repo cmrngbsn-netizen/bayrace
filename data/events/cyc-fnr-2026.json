@@ -1,6 +1,7 @@
 {
  "id": "cyc-fnr-2026",
  "name": "CYC Friday Night Races 2026",
+ "short": "CYC Fridays",
  "source": "CYC2026 FNR SI v2.1 (incl. amendments), Addendum 2",
  "start": {
   "lat": 37.8711,

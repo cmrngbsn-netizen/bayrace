@@ -14,12 +14,13 @@ const conditions = (() => {
 
   const pad = n => String(n).padStart(2, '0');
   const ymd = d => `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}`;
-  const hm = h => `${pad(Math.floor(h))}:${pad(Math.round((h % 1) * 60) % 60)}`;
+  const hm = h => { const m = Math.round(h * 60); return `${pad(Math.floor(m / 60))}:${pad(m % 60)}`; };
   const hourOf = s => { const [, t] = s.split(' '); const [H, M] = t.split(':'); return +H + M / 60; };  // "2026-11-17 18:15"
   const compass = deg => COMPASS[Math.round(deg / 22.5) % 16];
   const ago = t => { const m = Math.round((Date.now() - t) / 60000); return m < 1 ? 'just now' : m < 60 ? `${m} min ago` : m < 1440 ? `${Math.round(m / 60)} h ago` : `${Math.round(m / 1440)} d ago`; };
-  // Race window: the event's start time and length, unless changed on this device.
-  const span = () => store.get('raceWindow') || {start: cfg.raceStart, end: hm(hourOf('x ' + cfg.raceStart) + cfg.raceHours)};
+  // Race window: the event's start time and length, unless changed on this device (per event).
+  const win = () => `raceWindow:${event.id}`;
+  const span = () => store.get(win()) || {start: cfg.raceStart, end: hm(hourOf('x ' + cfg.raceStart) + cfg.raceHours)};
   const startH = () => hourOf('x ' + span().start), endH = () => { const e = hourOf('x ' + span().end); return e > startH() ? e : 24; };
 
   // fetch JSON; remember it on the device; fall back to the remembered copy when offline. A copy
@@ -116,7 +117,7 @@ const conditions = (() => {
     when.innerHTML = `<div class="trow"><span>${date.toLocaleDateString(undefined, {weekday: 'long', month: 'short', day: 'numeric'})}</span>`
       + `<button type="button" class="btn${editing ? '' : ' alt'} trange" aria-expanded="${editing}">${start}–${end} <span aria-hidden="true">✎</span></button></div>`
       + `<div class="tedit"${editing ? '' : ' hidden'}><label>Start <input type="time" step="300" data-k="start" value="${start}"></label>`
-      + `<label>End <input type="time" step="300" data-k="end" value="${end}"></label>${store.get('raceWindow') ? '<button type="button" class="btn alt treset">Reset</button>' : ''}</div>`;
+      + `<label>End <input type="time" step="300" data-k="end" value="${end}"></label>${store.get(win()) ? '<button type="button" class="btn alt treset">Reset</button>' : ''}</div>`;
     places.innerHTML = stops.map(s => `<button type="button" class="btn${s.a === picked ? '' : ' alt'}" aria-pressed="${s.a === picked}">${s.a.name}</button>`).join('');
     places.querySelectorAll('button').forEach((b, i) => b.onclick = () => { picked = stops[i].a; load(); });
     body.innerHTML = '<p class="cmuted">Loading…</p>';
@@ -232,20 +233,20 @@ const conditions = (() => {
   function open() { panel.hidden = false; prune(); load(); }
   when.addEventListener('click', e => {
     if (e.target.closest('.trange')) { editing = !editing; load(); }
-    if (e.target.closest('.treset')) { store.set('raceWindow', null); load(); }
+    if (e.target.closest('.treset')) { store.set(win(), null); load(); }
   });
   when.addEventListener('change', e => {
     const k = e.target.dataset.k;
     if (!k || !/^\d\d:\d\d$/.test(e.target.value)) return;
-    store.set('raceWindow', {...span(), [k]: e.target.value});
+    store.set(win(), {...span(), [k]: e.target.value});
     load();
   });
   document.getElementById('condclose').onclick = () => panel.hidden = true;
-  select.addEventListener('change', () => setTimeout(() => panel.hidden || load()));  // after courses.js has drawn the new course
-  fetch(EVENT_URL).then(r => r.json()).then(ev => {
-    cfg = ev.conditions;
-    const btn = document.getElementById('condbtn');
-    btn.hidden = false; btn.onclick = () => panel.hidden ? open() : (panel.hidden = true);
+  const btn = document.getElementById('condbtn');
+  btn.onclick = () => panel.hidden ? open() : (panel.hidden = true);
+  select.addEventListener('change', () => {  // new course or event (courses.js)
+    cfg = event.conditions; btn.hidden = !cfg;
+    setTimeout(() => panel.hidden || !cfg || load());  // after courses.js has drawn the new course
   });
   return {open};
 })();

@@ -1,0 +1,311 @@
+{
+ "id": "yra-dh-midwinter-2027",
+ "name": "YRA Doublehanded Midwinter 2027",
+ "short": "DH Midwinters",
+ "source": "YRA 2027 Doublehanded Midwinter Series, SI Addendum 1 (Midwinter #1, Nov 15)",
+ "start": {
+  "lat": 37.809,
+  "lon": -122.4461,
+  "name": "Start",
+  "desc": "Yellow panel on the St Francis YC race deck to buoy “A” north of the club"
+ },
+ "finish": {
+  "lat": 37.809,
+  "lon": -122.4461,
+  "name": "Finish",
+  "desc": "Same line as the start"
+ },
+ "marks": {
+  "2": {
+   "ref": "2",
+   "island": true,
+   "place": "Alcatraz Island",
+   "type": "Island",
+   "colors": [],
+   "desc": "Alcatraz Island — round the whole island"
+  },
+  "4": {
+   "ref": "4"
+  },
+  "6": {
+   "ref": "6"
+  },
+  "8": {
+   "ref": "8"
+  },
+  "15": {
+   "ref": "15"
+  },
+  "16": {
+   "ref": "16"
+  },
+  "17": {
+   "ref": "17"
+  },
+  "18": {
+   "ref": "18"
+  },
+  "21": {
+   "ref": "21"
+  },
+  "23": {
+   "ref": "23"
+  },
+  "24": {
+   "ref": "24"
+  },
+  "Angel": {
+   "lat": 37.8608,
+   "lon": -122.4329,
+   "island": true,
+   "place": "Island",
+   "type": "Island",
+   "colors": [],
+   "desc": "Angel Island — round the whole island"
+  }
+ },
+ "courses": [
+  {
+   "no": "1",
+   "section": "Starboard roundings",
+   "marks": [
+    "16-S",
+    "6-S"
+   ],
+   "dist": 3.4
+  },
+  {
+   "no": "2",
+   "section": "Starboard roundings",
+   "marks": [
+    "16-S",
+    "17-S",
+    "6-S"
+   ],
+   "dist": 5.5
+  },
+  {
+   "no": "3",
+   "section": "Starboard roundings",
+   "marks": [
+    "16-S",
+    "18-S"
+   ],
+   "dist": 6.1
+  },
+  {
+   "no": "4",
+   "section": "Starboard roundings",
+   "marks": [
+    "16-S",
+    "2-S",
+    "18-S"
+   ],
+   "dist": 6.6
+  },
+  {
+   "no": "5",
+   "section": "Starboard roundings",
+   "marks": [
+    "16-S",
+    "2-S",
+    "6-S"
+   ],
+   "dist": 7.4
+  },
+  {
+   "no": "6",
+   "section": "Starboard roundings",
+   "marks": [
+    "16-S",
+    "17-S",
+    "18-S"
+   ],
+   "dist": 7.4
+  },
+  {
+   "no": "7",
+   "section": "Starboard roundings",
+   "marks": [
+    "16-S",
+    "8-S",
+    "18-S"
+   ],
+   "dist": 8.8
+  },
+  {
+   "no": "8",
+   "section": "Starboard roundings",
+   "marks": [
+    "16-S",
+    "15-S",
+    "8-S",
+    "18-S"
+   ],
+   "dist": 9.9
+  },
+  {
+   "no": "9",
+   "section": "Starboard roundings",
+   "marks": [
+    "16-S",
+    "Angel-S",
+    "18-S"
+   ],
+   "dist": 10.9
+  },
+  {
+   "no": "10",
+   "section": "Starboard roundings",
+   "marks": [
+    "16-S",
+    "Angel-S",
+    "24-S",
+    "18-S"
+   ],
+   "dist": 11.7
+  },
+  {
+   "no": "11",
+   "section": "Port roundings",
+   "marks": [
+    "8-P",
+    "17-P",
+    "16-P"
+   ],
+   "dist": 8.6
+  },
+  {
+   "no": "12",
+   "section": "Port roundings",
+   "marks": [
+    "21-P",
+    "16-P"
+   ],
+   "dist": 6.2
+  },
+  {
+   "no": "13",
+   "section": "Port roundings",
+   "marks": [
+    "6-P",
+    "16-P"
+   ],
+   "dist": 3.4
+  },
+  {
+   "no": "14",
+   "section": "Port roundings",
+   "marks": [
+    "6-P",
+    "8-P",
+    "16-P"
+   ],
+   "dist": 9.2
+  },
+  {
+   "no": "15",
+   "section": "Port roundings",
+   "marks": [
+    "6-P",
+    "8-P",
+    "23-P",
+    "16-P"
+   ],
+   "dist": 9.8
+  },
+  {
+   "no": "16",
+   "section": "Port roundings",
+   "marks": [
+    "18-P",
+    "16-P"
+   ],
+   "dist": 6.1
+  },
+  {
+   "no": "17",
+   "section": "Port roundings",
+   "marks": [
+    "18-P",
+    "21-P",
+    "16-P"
+   ],
+   "dist": 7.0
+  }
+ ],
+ "conditions": {
+  "raceStart": "11:55",
+  "raceHours": 5.08,
+  "tide": {
+   "id": "9414290",
+   "name": "San Francisco (Golden Gate)"
+  },
+  "areas": [
+   {
+    "name": "Cityfront",
+    "current": "SFB1204",
+    "at": [
+     37.8143,
+     -122.432
+    ]
+   },
+   {
+    "name": "Golden Gate",
+    "current": "SFB1203",
+    "at": [
+     37.8201,
+     -122.473
+    ]
+   },
+   {
+    "name": "Yellow Bluff",
+    "current": "PCT0546",
+    "at": [
+     37.8455,
+     -122.4572
+    ]
+   },
+   {
+    "name": "Harding Rock",
+    "current": "PCT0556",
+    "at": [
+     37.8317,
+     -122.4433
+    ]
+   },
+   {
+    "name": "Raccoon Strait",
+    "current": "SFB1212",
+    "at": [
+     37.8719,
+     -122.442
+    ]
+   },
+   {
+    "name": "North of Alcatraz",
+    "current": "SFB1211",
+    "at": [
+     37.832,
+     -122.423
+    ]
+   },
+   {
+    "name": "Blossom Rock",
+    "current": "SFB1205",
+    "at": [
+     37.8184,
+     -122.4035
+    ]
+   },
+   {
+    "name": "East of Angel Island",
+    "current": "PCT0586",
+    "at": [
+     37.861,
+     -122.4
+    ]
+   }
+  ]
+ }
+}
