@@ -381,20 +381,16 @@
  "conditions": {
   "raceStart": "18:15",
   "raceHours": 2.5,
-  "area": [37.855, -122.445],
-  "tide": {
-   "id": "9414290",
-   "name": "San Francisco (Golden Gate)"
-  },
-  "currents": [
-   {
-    "id": "SFB1212",
-    "name": "Raccoon Strait"
-   },
-   {
-    "id": "SFB1203",
-    "name": "Golden Gate Bridge"
-   }
+  "raceDays": {"weekday": 5, "from": "2026-04-03", "to": "2026-09-04"},
+  "tide": {"id": "9414290", "name": "San Francisco (Golden Gate)"},
+  "areas": [
+   {"name": "Raccoon Strait", "current": "SFB1212", "at": [37.8719, -122.442]},
+   {"name": "Pt Stuart", "current": "PCT0606", "at": [37.8612, -122.452]},
+   {"name": "Yellow Bluff", "current": "PCT0546", "at": [37.8455, -122.4572]},
+   {"name": "Harding Rock", "current": "PCT0556", "at": [37.8317, -122.4433]},
+   {"name": "Golden Gate", "current": "SFB1203", "at": [37.8201, -122.473]},
+   {"name": "Cityfront", "current": "SFB1204", "at": [37.8143, -122.432]},
+   {"name": "North Channel", "current": "PCT0626", "at": [37.8872, -122.413]}
   ]
  }
 }

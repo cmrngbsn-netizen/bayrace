@@ -72,19 +72,24 @@ html,body{margin:0;height:100%;background:#0b2a3d;-webkit-user-select:none;user-
 #cond header{display:flex;align-items:center;justify-content:space-between}
 #cond h2{margin:4px 0;font-size:20px}
 #condclose{border:0;background:none;font-size:30px;line-height:1;padding:4px 8px;color:#333}
-#conddays{display:flex;gap:6px;overflow-x:auto;padding:6px 0 10px}
-#conddays button{flex:none;border:1px solid #c9c8c2;background:#fff;border-radius:16px;padding:6px 12px;font:600 14px system-ui;color:#333}
-#conddays button.on{background:#0b2a3d;border-color:#0b2a3d;color:#fff}
+#condwhen{font-size:14px;color:#33322f;margin-bottom:2px}
+#condplaces{display:flex;flex-wrap:wrap;gap:6px;padding:8px 0 10px}
+#condplaces button{flex:none;border:1px solid #c9c8c2;background:#fff;border-radius:16px;padding:6px 12px;font:600 14px system-ui;color:#333}
+#condplaces button.on{background:#0b2a3d;border-color:#0b2a3d;color:#fff}
 #cond h3{margin:18px 0 6px;font-size:16px}
 #cond h3 .cmuted{font-weight:400;font-size:12px}
 .cmuted{color:#6b6a65}
 .chead{background:#eef3f8;border-radius:10px;padding:10px 12px;line-height:1.6}
-.chead .cwhen{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:#52514e}
+.chead .crow{display:flex;gap:10px;align-items:baseline;font-size:15px}
+.chead .clab{flex:none;width:58px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:#52514e}
+.cnear{margin:0 0 6px;font-size:13px;color:#52514e}
+.chart .ctitle{font-weight:600;font-size:14px;margin:16px 0 2px}
+.chart .ctitle .cmuted{font-weight:400;font-size:12px}
+.ctide{font-size:13px;margin:14px 0 0;line-height:1.5}
 .chead .flood,.chead .ebb,.chead .slack{font-weight:700}
 #cond .key{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:baseline}
 #cond .gustkey{background:#2a78d633;border:1px solid #2a78d6;box-sizing:border-box}
 .chart{position:relative}
-.chart .legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:#52514e;margin-bottom:2px}
 .chart svg{display:block;width:100%;height:auto;touch-action:pan-y}
 .chart .tick{font:10px system-ui;fill:#6b6a65}
 .chart .dir{font:600 9px system-ui;fill:#6b6a65;letter-spacing:.06em}
@@ -97,9 +102,7 @@ html,body{margin:0;height:100%;background:#0b2a3d;-webkit-user-select:none;user-
 .chart .gust{fill:#2a78d633;stroke:#2a78d6;stroke-width:1}
 .chart .arrow{fill:#0b2a3d}
 .chart .tip{position:absolute;top:18px;background:#0b0b0bea;color:#fff;font:12px/1.45 system-ui;padding:6px 8px;border-radius:6px;pointer-events:none;white-space:nowrap}
-.evs{font-size:13px;margin:4px 0;line-height:1.5}
-.tides{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:14px}
-#cond details{margin-top:8px;font-size:13px;line-height:1.45}
+#cond details{margin-top:12px;font-size:13px;line-height:1.45}
 #cond details summary{font-weight:600;cursor:pointer}
 #cond details p{margin:6px 0}
 .csrc{margin-top:18px;font-size:12px}
