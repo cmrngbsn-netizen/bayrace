@@ -105,7 +105,7 @@
    "desc": "Inflatable, approx 1.5 nm to windward of the start line — place on race day",
    "type": "Inflatable",
    "colors": [],
-   "place": "~1.5 nm to windward"
+   "place": "Windward Mark"
   },
   "L": {
    "lat": 37.8665,
@@ -115,7 +115,7 @@
    "desc": "Inflatable, approx 0.2 nm to windward of the start line — place on race day",
    "type": "Inflatable",
    "colors": [],
-   "place": "~0.2 nm to windward"
+   "place": "Near Start"
   }
  },
  "courses": [
