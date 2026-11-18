@@ -1,6 +1,6 @@
 'use strict';
-// Conditions panel for race day: tidal current (NOAA CO-OPS predictions) and wind (NWS hourly grid
-// forecast) at one place at a time. The places are the areas the selected course passes through,
+// Conditions panel for today's race: tidal current (NOAA CO-OPS predictions) and wind (NWS hourly
+// grid forecast) at one place at a time. The places are the areas the selected course passes through,
 // in the order the boat gets there; pick one to see what it'll be like there.
 // Every response is cached on the device; offline, the last copy is shown with its age.
 const conditions = (() => {
@@ -20,28 +20,31 @@ const conditions = (() => {
   const ago = t => { const m = Math.round((Date.now() - t) / 60000); return m < 1 ? 'just now' : m < 60 ? `${m} min ago` : m < 1440 ? `${Math.round(m / 60)} h ago` : `${Math.round(m / 1440)} d ago`; };
   const startH = () => hourOf('x ' + cfg.raceStart), endH = () => startH() + cfg.raceHours;
 
-  // fetch JSON; remember it on the device; fall back to the remembered copy when offline
-  async function cached(url, key) {
+  // fetch JSON; remember it on the device; fall back to the remembered copy when offline. A copy
+  // younger than maxAge (ms) is used without asking again: tide and current predictions for a
+  // date never change, so they're fetched once. pick trims a response to what's used before saving.
+  async function cached(url, key, maxAge = 0, pick = d => d) {
+    const c = store.get('cache:' + key);
+    if (c && Date.now() - c.t < maxAge) return {data: c.data, t: c.t, stale: false};
     try {
       const r = await fetch(url, {signal: AbortSignal.timeout(12000)});
       if (!r.ok) throw new Error(r.status);
-      const data = await r.json();
+      const data = pick(await r.json());
       store.set('cache:' + key, {t: Date.now(), data});
       return {data, t: Date.now(), stale: false};
     } catch {
-      const c = store.get('cache:' + key);
       return c ? {data: c.data, t: c.t, stale: true} : null;
     }
   }
-
-  // Today if it's a race day and the race isn't over yet, else the next race day.
-  function raceDay() {
-    const now = new Date(), d = new Date(now);
-    d.setHours(0, 0, 0, 0);
-    while (d.getDay() !== cfg.raceDays.weekday || (ymd(d) === ymd(now) && now.getHours() + now.getMinutes() / 60 > endH())) d.setDate(d.getDate() + 1);
-    return d;
+  // Drop saved responses for past days (keys end in the date) and from older versions, so the
+  // site's storage never fills up.
+  function prune() {
+    try {
+      const today = ymd(new Date());
+      Object.keys(localStorage).filter(k => k.startsWith('bayrace:cache:'))
+        .filter(k => /^bayrace:cache:(cur30|nwszone):/.test(k) || (/:(\d{8})$/.test(k) && k.slice(-8) < today)).forEach(k => localStorage.removeItem(k));
+    } catch {}
   }
-  const inSeason = d => ymd(d) >= cfg.raceDays.from.replace(/-/g, '') && ymd(d) <= cfg.raceDays.to.replace(/-/g, '');
 
   // Areas along the selected course (courses.js `current`), each with the marks that are in it.
   // No course: every area, so the panel is still useful before one is picked.
@@ -79,10 +82,10 @@ const conditions = (() => {
   // the usual cosine shape.
   async function currentAt(id, d) {
     const toH = p => hourOf(p.Time) + (p.Time.slice(0, 10).replace(/-/g, '') === d ? 0 : 24);  // early tomorrow → h > 24
-    const series = await cached(`${COOPS}&product=currents_predictions&station=${id}&begin_date=${d}&range=30&interval=30`, `c30:${id}:${d}`);
+    const series = await cached(`${COOPS}&product=currents_predictions&station=${id}&begin_date=${d}&range=30&interval=30`, `c30:${id}:${d}`, Infinity);
     const cp = series && series.data.current_predictions ? series.data.current_predictions.cp : [];
     const subordinate = cp.length && cp[0].Type;
-    const evr = subordinate ? series : await cached(`${COOPS}&product=currents_predictions&station=${id}&begin_date=${d}&range=30&interval=MAX_SLACK`, `curev:${id}:${d}`);
+    const evr = subordinate ? series : await cached(`${COOPS}&product=currents_predictions&station=${id}&begin_date=${d}&range=30&interval=MAX_SLACK`, `curev:${id}:${d}`, Infinity);
     const evs = (evr && evr.data.current_predictions ? evr.data.current_predictions.cp : []).map(p => ({h: toH(p), type: p.Type, v: p.Velocity_Major}));
     const pts = [];
     if (subordinate) {
@@ -94,36 +97,33 @@ const conditions = (() => {
   }
 
   async function windAt(at) {
-    const key = at.join(','), point = await cached(`https://api.weather.gov/points/${key}`, `nwspoint:${key}`);
-    if (!point) return {grid: null, zone: null};
-    const p = point.data.properties;
-    const [grid, zone] = await Promise.all([cached(p.forecastGridData, `nwsgrid:${key}`), cached(p.forecastZone + '/forecast', `nwszone:${p.forecastZone.split('/').pop()}`)]);
-    return {grid, zone};
+    const key = at.join(','), point = await cached(`https://api.weather.gov/points/${key}`, `nwspoint:${key}`, Infinity, d => ({properties: {forecastGridData: d.properties.forecastGridData}}));
+    return point ? cached(point.data.properties.forecastGridData, `nwsgrid:${key}`, 30 * 60e3,
+      ({properties: p}) => ({properties: {windSpeed: p.windSpeed, windGust: p.windGust, windDirection: p.windDirection}})) : null;
   }
 
   async function load() {
-    const n = ++loading, date = raceDay(), d = ymd(date), stops = route();
+    const n = ++loading, date = new Date(), d = ymd(date), stops = route();
     if (pickedFor !== (current && current.no) || !stops.some(s => s.a === picked)) {  // new course: nearest place to me, else the start
       pickedFor = current && current.no;
       const here = typeof me !== 'undefined' && me && me.getLatLng();
       picked = here ? stops.map(s => s.a).sort((a, b) => nm(here, L.latLng(...a.at)) - nm(here, L.latLng(...b.at)))[0] : stops[0].a;
     }
     const stop = stops.find(s => s.a === picked);
-    when.innerHTML = `${date.toLocaleDateString(undefined, {weekday: 'long', month: 'short', day: 'numeric'})} · ${cfg.raceStart}–${hm(endH())}`
-      + (inSeason(date) ? '' : ` <span class="cmuted">· no race scheduled</span>`);
+    when.textContent = `${date.toLocaleDateString(undefined, {weekday: 'long', month: 'short', day: 'numeric'})} · race ${cfg.raceStart}–${hm(endH())}`;
     places.innerHTML = stops.map(s => `<button type="button" class="${s.a === picked ? 'on' : ''}">${s.a.name}</button>`).join('');
     places.querySelectorAll('button').forEach((b, i) => b.onclick = () => { picked = stops[i].a; load(); });
     body.innerHTML = '<p class="cmuted">Loading…</p>';
     const [cur, wind, tide] = await Promise.all([currentAt(picked.current, d), windAt(picked.at),
-      cached(`${COOPS}&product=predictions&station=${cfg.tide.id}&begin_date=${d}&range=24&datum=MLLW&interval=hilo`, `tide:${cfg.tide.id}:${d}`)]);
+      cached(`${COOPS}&product=predictions&station=${cfg.tide.id}&begin_date=${d}&range=24&datum=MLLW&interval=hilo`, `tide:${cfg.tide.id}:${d}`, Infinity)]);
     if (n !== loading) return;  // another place was picked meanwhile
-    render(date, stop, cur, wind.grid, wind.zone, tide);
+    render(date, stop, cur, wind, tide);
   }
 
-  function render(date, stop, cur, grid, zone, tide) {
+  function render(date, stop, cur, grid, tide) {
     const start = startH(), end = endH(), x0 = Math.max(0, Math.floor(start - 1)), x1 = Math.min(24, Math.ceil(end + 1));
     const now = new Date(), nowH = ymd(date) === ymd(now) && now.getHours() + now.getMinutes() / 60;
-    const stale = [...cur.res, grid, zone, tide].filter(r => r && r.stale);
+    const stale = [...cur.res, grid, tide].filter(r => r && r.stale), missing = [...cur.res, grid, tide].some(r => !r);
     const at = h => { const p = cur.pts; for (let i = 0; i + 1 < p.length; i++) if (p[i].h <= h && h <= p[i + 1].h) return p[i].v + (p[i + 1].v - p[i].v) * (h - p[i].h) / (p[i + 1].h - p[i].h); return null; };
     const dir = v => Math.abs(v) < 0.05 ? 'Slack' : v > 0 ? 'Flood' : 'Ebb';
     const say = v => dir(v) === 'Slack' ? 'slack' : `${dir(v).toLowerCase()} ${Math.abs(v).toFixed(1)} kt`;
@@ -144,28 +144,26 @@ const conditions = (() => {
     const ws = g ? hourly(g.windSpeed.values, date) : {}, wg = g ? hourly(g.windGust.values, date) : {}, wd = g ? hourly(g.windDirection.values, date) : {};
     const wind = []; for (let h = x0; h < x1; h++) if (ws[h] != null) wind.push({h, s: ws[h] * KT_PER_KMH, g: (wg[h] ?? ws[h]) * KT_PER_KMH, d: wd[h]});
     const race = wind.filter(w => w.h >= Math.floor(start) && w.h < end);
-    let windHead = '<span class="cmuted">No forecast yet</span>';
+    let windHead = '<span class="cmuted">No forecast for these hours</span>';
     if (race.length) {
       const lo = Math.round(Math.min(...race.map(w => w.s))), hi = Math.round(Math.max(...race.map(w => w.s))), gu = Math.round(Math.max(...race.map(w => w.g)));
       const c0 = compass(race[0].d), c1 = compass(race[race.length - 1].d);
-      windHead = `<b>${c0}${c1 !== c0 ? ` → ${c1}` : ''} ${lo === hi ? lo : `${lo}–${hi}`} kt</b>, gusts ${gu}`;
+      windHead = `<b>${c0}${c1 !== c0 ? ` → ${c1}` : ''} ${lo === hi ? lo : `${lo}–${hi}`} kt</b>, gusts ${gu} kt`;
     }
 
     // highs and lows from midday on: the ones that matter for an evening race
     const tides = tide && tide.data.predictions ? tide.data.predictions.filter(p => p.t.slice(0, 10).replace(/-/g, '') === ymd(date) && hourOf(p.t) >= start - 6)
       .map(p => `${p.type === 'H' ? 'High' : 'Low'} ${p.t.slice(11)} <span class="cmuted">${(+p.v).toFixed(1)} ft</span>`).join(' · ') : '';
-    const zoneText = zone && zone.data.properties ? zone.data.properties.periods.slice(0, 3).map(p => `<p><b>${p.name}:</b> ${p.detailedForecast}</p>`).join('') : '';
 
     body.innerHTML = (stop.marks.length ? `<p class="cnear">Marks here: ${stop.marks.join(', ')}</p>` : '')
       + `<div class="chead"><div class="crow"><span class="clab">Current</span><span>${curHead}${curSub ? `<br><span class="cmuted">${curSub}</span>` : ''}</span></div>`
       + `<div class="crow"><span class="clab">Wind</span><span>${windHead}</span></div></div>`
-      + currentChart(cur.pts, x0, x1, start, end, nowH)
+      + (v0 != null ? currentChart(cur.pts, x0, x1, start, end, nowH) : '')
       + (wind.length ? windChart(wind, x0, x1, start, end, nowH) : '')
       + (tides ? `<p class="ctide"><b>Tide</b> ${tides}</p>` : '')
-      + (zoneText ? `<details><summary>SF Bay marine forecast (NWS)</summary>${zoneText}</details>` : '')
-      + `<p class="cmuted csrc">${stale.length ? `<span class="warn">Offline — showing data saved ${ago(Math.min(...stale.map(r => r.t)))}.</span> ` : ''}NOAA current station ${picked.current}; NWS forecast. Predictions, not observations. Not for navigation.</p>`;
+      + `<p class="cmuted csrc">${missing ? `<span class="warn">Couldn't download some of this — check your connection.</span> ` : ''}${stale.length ? `<span class="warn">Offline — showing data saved ${ago(Math.min(...stale.map(r => r.t)))}.</span> ` : ''}NOAA current station ${picked.current}; NWS forecast. Predictions, not observations. Not for navigation.</p>`;
     hover(body.querySelector('.cur svg'), x0, x1, h => { const v = at(h); return v == null ? '' : `<b>${hm(h)}</b> ${say(v)}`; });
-    hover(body.querySelector('.wind svg'), x0, x1, h => { const w = wind.find(w => w.h === Math.floor(h)); return w ? `<b>${hm(w.h)}</b> ${compass(w.d)} ${Math.round(w.s)} kt, gusts ${Math.round(w.g)}` : ''; });
+    hover(body.querySelector('.wind svg'), x0, x1, h => { const w = wind.find(w => w.h === Math.floor(h)); return w ? `<b>${hm(w.h)}</b> from ${compass(w.d)}, ${Math.round(w.s)} kt, gusts ${Math.round(w.g)} kt` : ''; });
   }
 
   // ---- charts (inline SVG; viewBox scales to the panel width) ----
@@ -175,7 +173,7 @@ const conditions = (() => {
     let s = `<rect x="${xs(start, x0, x1)}" y="${PT}" width="${xs(end, x0, x1) - xs(start, x0, x1)}" height="${H - PT - PB}" class="race"/>`
       + `<text x="${xs(start, x0, x1) + 3}" y="${H - PB - 3}" class="racel">race</text>`;
     for (let h = x0; h <= x1; h++) s += `<text x="${xs(h, x0, x1)}" y="${H - 4}" class="tick" text-anchor="middle">${h % 24}</text>`;
-    if (nowH !== false && nowH >= x0 && nowH <= x1) s += `<line x1="${xs(nowH, x0, x1)}" x2="${xs(nowH, x0, x1)}" y1="${PT}" y2="${H - PB}" class="now"/>`;
+    if (nowH !== false && nowH >= x0 && nowH <= x1) s += `<line x1="${xs(nowH, x0, x1)}" x2="${xs(nowH, x0, x1)}" y1="${PT}" y2="${H - PB}" class="now"/><text x="${xs(nowH, x0, x1) + 3}" y="${PT + 9}" class="nowl">now</text>`;
     return s;
   }
   function currentChart(pts, x0, x1, start, end, nowH) {
@@ -184,23 +182,24 @@ const conditions = (() => {
     const y = v => PT + (max - v) / (2 * max) * (H - PT - PB);
     let s = frame(x0, x1, H, PT, PB, start, end, nowH)
       + `<line x1="${PL}" x2="${W - PR}" y1="${y(0)}" y2="${y(0)}" class="zero"/>`
-      + `<text x="${PL - 4}" y="${y(max) + 8}" class="tick" text-anchor="end">${max}</text><text x="${PL - 4}" y="${y(-max)}" class="tick" text-anchor="end">${max}</text>`
+      + `<text x="${PL - 4}" y="${y(max) + 8}" class="tick" text-anchor="end">${max} kt</text><text x="${PL - 4}" y="${y(-max)}" class="tick" text-anchor="end">${max} kt</text>`
       + `<text x="${W - PR - 3}" y="${PT + 9}" class="dir" text-anchor="end">FLOOD ↑</text><text x="${W - PR - 3}" y="${H - PB - 3}" class="dir" text-anchor="end">EBB ↓</text>`;
     if (p.length) s += `<polyline points="${p.map(q => `${xs(q.h, x0, x1).toFixed(1)},${y(q.v).toFixed(1)}`).join(' ')}" fill="none" stroke="${SERIES}" stroke-width="2" stroke-linejoin="round"/>`;
-    return `<div class="chart cur"><div class="ctitle">Current <span class="cmuted">kt</span></div><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Tidal current, knots; flood above the line, ebb below">${s}</svg><div class="tip" hidden></div></div>`;
+    return `<div class="chart cur"><div class="ctitle">Current <span class="cmuted">(knots)</span></div><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Tidal current, knots; flood above the line, ebb below">${s}</svg><div class="tip" hidden></div></div>`;
   }
   function windChart(wind, x0, x1, start, end, nowH) {
     const H = 130, PT = 24, PB = 18, max = Math.max(10, Math.ceil(Math.max(...wind.map(w => w.g)) / 5) * 5);
     const y = v => PT + (max - v) / max * (H - PT - PB), bw = (W - PL - PR) / (x1 - x0) - 3;
     let s = frame(x0, x1, H, PT, PB, start, end, nowH);
-    for (let v = 0; v <= max; v += max > 20 ? 10 : 5) s += `<line x1="${PL}" x2="${W - PR}" y1="${y(v)}" y2="${y(v)}" class="grid"/><text x="${PL - 4}" y="${y(v) + 3}" class="tick" text-anchor="end">${v}</text>`;
+    const step = max > 20 ? 10 : 5, top = Math.floor(max / step) * step;
+    for (let v = 0; v <= max; v += step) s += `<line x1="${PL}" x2="${W - PR}" y1="${y(v)}" y2="${y(v)}" class="grid"/><text x="${PL - 4}" y="${y(v) + 3}" class="tick" text-anchor="end">${v}${v === top ? ' kt' : ''}</text>`;
     wind.forEach(w => {
       const x = xs(w.h, x0, x1) + 1.5, cx = x + bw / 2;
       s += `<rect x="${x}" y="${y(w.g)}" width="${bw}" height="${y(w.s) - y(w.g)}" rx="2" class="gust"/>`
         + `<rect x="${x}" y="${y(w.s)}" width="${bw}" height="${Math.max(0, y(0) - y(w.s))}" rx="2" fill="${SERIES}"/>`
-        + `<g transform="translate(${cx},${PT - 13}) rotate(${w.d + 180})"><path d="M0,-6 L4,4 L0,2 L-4,4 Z" class="arrow"/></g>`;
+        + `<text x="${cx}" y="${PT - 9}" class="wdir" text-anchor="middle">${compass(w.d)}</text>`;
     });
-    return `<div class="chart wind"><div class="ctitle">Wind <span class="cmuted">kt · <span class="key" style="background:${SERIES}"></span>speed <span class="key gustkey"></span>gusts · arrows point downwind</span></div>`
+    return `<div class="chart wind"><div class="ctitle">Wind <span class="cmuted">(knots) · <span class="key" style="background:${SERIES}"></span>Speed <span class="key gustkey"></span>Gusts · S = from the south</span></div>`
       + `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Hourly wind speed and gusts, knots">${s}</svg><div class="tip" hidden></div></div>`;
   }
   // Crosshair + tooltip; works with touch (pointer events) as well as mouse.
@@ -224,7 +223,7 @@ const conditions = (() => {
     svg.addEventListener('pointermove', move); svg.addEventListener('pointerdown', move); svg.addEventListener('pointerleave', leave);
   }
 
-  function open() { panel.hidden = false; load(); }
+  function open() { panel.hidden = false; prune(); load(); }
   document.getElementById('condclose').onclick = () => panel.hidden = true;
   select.addEventListener('change', () => setTimeout(() => panel.hidden || load()));  // after courses.js has drawn the new course
   fetch(EVENT_URL).then(r => r.json()).then(ev => {

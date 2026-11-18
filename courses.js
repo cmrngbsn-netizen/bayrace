@@ -17,7 +17,7 @@ const nm = (a, b) => {  // flat-earth distance in nm; plenty accurate across the
 };
 const pathNm = p => p.slice(1).reduce((s, b, i) => s + nm(p[i], b), 0);
 
-const courseLayer = L.layerGroup().addTo(map), leaderLayer = L.layerGroup().addTo(map);
+const courseLayer = L.layerGroup().addTo(map), leaderLayer = L.layerGroup().addTo(map), arrowLayer = L.layerGroup().addTo(map);
 const bar = document.getElementById('coursebar');
 const select = document.getElementById('course');
 const summary = document.getElementById('summary');
@@ -44,6 +44,7 @@ const placed = id => !!store.get(`pos:${event.id}:${id}`);
 function draw(no) {
   courseLayer.clearLayers();
   leaderLayer.clearLayers();
+  arrowLayer.clearLayers();
   drawn = null;
   current = event.courses.find(c => c.no === no);
   store.set('course', current ? current.no : null);
@@ -58,7 +59,8 @@ function draw(no) {
   const start = L.latLng(event.start.lat, event.start.lon), finish = L.latLng(event.finish.lat, event.finish.lon);
   const stops = [{id: 'SF', pos: start}, ...rounds.filter(r => r.pos), {id: 'SF', pos: finish}];
 
-  // Legs, routed around land. A leg sailed more than once (either way) is drawn once.
+  // Legs, routed around land. A leg sailed more than once is drawn once per direction; where
+  // lines would lie on top of each other, placeLabels splits them into side-by-side lanes.
   const legs = new Map();
   let total = 0, offLand = true;
   stops.slice(1).forEach((b, i) => {
@@ -69,16 +71,20 @@ function draw(no) {
     if (!leg) {
       const r = land.route(a.pos, b.pos);
       offLand = offLand && r.ok;
-      leg = {from: a.id, path: r.path, dist: pathNm(r.path), dirs: new Set()};
+      leg = {from: a.id, path: r.path, dist: pathNm(r.path), dirs: new Map()};  // direction → first leg number
       legs.set(key, leg);
     }
-    leg.dirs.add(a.id === leg.from ? 1 : -1);
+    const d = a.id === leg.from ? 1 : -1;
+    if (!leg.dirs.has(d)) leg.dirs.set(d, i);
     total += leg.dist;
   });
   legs.forEach(leg => {
-    leg.line = L.polyline(leg.path, {color: '#0b2a3d', weight: 3, opacity: 0.85, interactive: false}).addTo(courseLayer);
+    leg.lanes = [...leg.dirs].map(([d, order]) => {
+      const path = d > 0 ? leg.path : [...leg.path].reverse();
+      return {d, order, path, line: L.polyline(path, {color: '#0b2a3d', weight: 3, opacity: 0.85, interactive: false}).addTo(courseLayer)};
+    });
     leg.tag = L.marker(leg.path[0], {interactive: false, keyboard: false, icon: L.divIcon({className: 'legtag', iconSize: [0, 0],
-      html: `<div class="lt">${[...leg.dirs].map(d => `<span class="arr" data-d="${d}">➤</span>`).join('')}${leg.dist.toFixed(1)}</div>`})}).addTo(courseLayer);
+      html: `<div class="lt">${leg.dist.toFixed(1)} nm</div>`})}).addTo(courseLayer);
   });
 
   // One dot + one label per mark, listing every rounding of it (e.g. "2·4").
@@ -105,7 +111,7 @@ function draw(no) {
 
   const unplaced = Object.keys(byId).filter(id => (event.marks[id] || {}).approx && !placed(id));
   summary.innerHTML = `<div class="seq">Start → ${rounds.map(r => `<span class="${SIDE[r.side]}">${r.id} ${r.side}</span>`).join(' → ')} → Finish</div>`
-    + `<div class="dist">${total.toFixed(1)} nm <span>(SI ~${current.dist})</span>${unplaced.length ? ` · <span class="warn">approx: ${unplaced.join(', ')}</span>` : ''}`
+    + `<div class="dist">${total.toFixed(1)} nm <span>(SI ~${current.dist} nm)</span>${unplaced.length ? ` · <span class="warn">approx: ${unplaced.join(', ')}</span>` : ''}`
     + `${offLand ? '' : ' · <span class="warn">a leg may cross land</span>'}</div>`;
   drawn = {legs: [...legs.values()], marks, sf: start};
   map.fitBounds(L.latLngBounds([...legs.values()].flatMap(l => l.path)), {paddingTopLeft: [30, 60], paddingBottomRight: [30, bar.offsetHeight + 30], maxZoom: 15});
@@ -131,8 +137,9 @@ const grow = (b, m) => ({x0: b.x0 - m, y0: b.y0 - m, x1: b.x1 + m, y1: b.y1 + m}
 function placeLabels() {
   if (!drawn) return;
   const pt = ll => map.latLngToContainerPoint(ll), size = map.getSize();
+  layLanes(pt);
   const view = {x0: 4, y0: 50, x1: size.x - 4, y1: size.y - bar.offsetHeight - 30};  // clear of controls and course bar
-  const segs = drawn.legs.flatMap(l => l.path.slice(1).map((b, i) => [pt(l.path[i]), pt(b)]));
+  const segs = drawn.legs.flatMap(l => l.lanes.flatMap(n => n.P.slice(1).map((b, i) => [n.P[i], b])));
   const taken = [...drawn.marks.map(m => pt(m.pos)), pt(drawn.sf)].map(p => ({x0: p.x - 16, y0: p.y - 13, x1: p.x + 16, y1: p.y + 13}));
   const score = (b, lineCost) => {
     let s = 0;
@@ -196,19 +203,75 @@ function placeLabels() {
       let d = t * L, i = 0;
       while (i < lens.length - 1 && d > lens[i]) d -= lens[i++];
       const a = P[i], b = P[i + 1], f = d / (lens[i] || 1), x = a.x + (b.x - a.x) * f, y = a.y + (b.y - a.y) * f;
-      const ux = (b.x - a.x) / (lens[i] || 1), uy = (b.y - a.y) / (lens[i] || 1), ang = Math.atan2(uy, ux) * 180 / Math.PI;
+      const ux = (b.x - a.x) / (lens[i] || 1), uy = (b.y - a.y) / (lens[i] || 1);
       [1, -1].forEach(side => {
         const off = (Math.abs(ux) * h + Math.abs(uy) * w) / 2 + 5;  // clear the line whatever its angle
         const cx = x - uy * off * side, cy = y + ux * off * side;
         const bx = {x0: cx - w / 2, y0: cy - h / 2, x1: cx + w / 2, y1: cy + h / 2}, s = score(grow(bx, 2), 4) + Math.abs(t - 0.5) * 4;
-        if (!best || s < best.s) best = {s, bx, ang};
+        if (!best || s < best.s) best = {s, bx};
       });
     });
     if (best.s >= 100) { el.style.display = 'none'; return; }
     const anchor = pt(leg.path[0]);
     lt.style.transform = `translate(${best.bx.x0 - anchor.x}px,${best.bx.y0 - anchor.y}px)`;
-    lt.querySelectorAll('.arr').forEach(a => a.style.transform = `rotate(${best.ang + (a.dataset.d === '-1' ? 180 : 0)}deg)`);
     taken.push(best.bx);
+  });
+}
+// Lanes: each leg direction is drawn on its own line. Where two lines would run within a few
+// pixels of each other, each moves off to its right (the later of two same-way legs further),
+// easing back in near the marks so every line still ends at its dot. Arrows on the line show
+// which way each one is sailed. Screen space, so redone after every zoom.
+const GAP = 7, NEAR_PX = 8, EASE = 24, STEP = 5;
+function layLanes(pt) {
+  arrowLayer.clearLayers();
+  const lanes = drawn.legs.flatMap(l => l.lanes);
+  lanes.forEach(n => {  // resample every STEP px, with the local direction
+    const P = n.path.map(pt), S = [];
+    for (let i = 0; i + 1 < P.length; i++) {
+      const dx = P[i + 1].x - P[i].x, dy = P[i + 1].y - P[i].y, len = Math.hypot(dx, dy), k = Math.max(1, Math.ceil(len / STEP));
+      for (let j = 0; j < k; j++) S.push({x: P[i].x + dx * j / k, y: P[i].y + dy * j / k, ux: dx / (len || 1), uy: dy / (len || 1)});
+    }
+    const e = P[P.length - 1], last = S[S.length - 1] || {ux: 0, uy: 0};
+    S.push({x: e.x, y: e.y, ux: last.ux, uy: last.uy});
+    n.S = S; n.P0 = P;
+  });
+  const dSeg = (p, a, b) => {
+    const vx = b.x - a.x, vy = b.y - a.y, t = Math.max(0, Math.min(1, ((p.x - a.x) * vx + (p.y - a.y) * vy) / (vx * vx + vy * vy || 1)));
+    return {d: Math.hypot(p.x - a.x - vx * t, p.y - a.y - vy * t), ux: vx, uy: vy};
+  };
+  lanes.forEach(n => {
+    const raw = n.S.map(p => {
+      let hit = false, ahead = 0;
+      for (const o of lanes) {
+        if (o === n) continue;
+        for (let i = 0; i + 1 < o.P0.length; i++) {
+          const h = dSeg(p, o.P0[i], o.P0[i + 1]);
+          if (h.d >= NEAR_PX) continue;
+          hit = true;
+          if (h.ux * p.ux + h.uy * p.uy > 0 && o.order < n.order) ahead++;  // same way, sailed earlier
+          break;
+        }
+      }
+      return hit ? GAP * (1 + ahead) : 0;
+    });
+    // widen then smooth the offset so lanes part and rejoin gradually
+    const W = 4, wide = raw.map((_, i) => Math.max(...raw.slice(Math.max(0, i - W), i + W + 1)));
+    const len = n.S.length;
+    n.P = n.S.map((p, i) => {
+      const win = wide.slice(Math.max(0, i - W), i + W + 1), off = win.reduce((a, b) => a + b, 0) / win.length * Math.min(1, i * STEP / EASE, (len - 1 - i) * STEP / EASE);
+      return L.point(p.x - p.uy * off, p.y + p.ux * off);  // right of travel (screen y points down)
+    });
+    n.line.setLatLngs(n.P.map(q => map.containerPointToLatLng(q)));
+    // arrows: one mid-lane, more on long lanes
+    const total = (len - 1) * STEP;
+    if (total < 60) return;
+    const at = total > 320 ? [0.25, 0.5, 0.75] : [0.5];
+    at.forEach(f => {
+      const i = Math.round(f * (len - 1)), p = n.P[i], q = n.P[Math.min(len - 1, i + 1)], r = n.P[Math.max(0, i - 1)];
+      const ang = Math.atan2(q.y - r.y, q.x - r.x) * 180 / Math.PI;
+      L.marker(map.containerPointToLatLng(p), {interactive: false, keyboard: false, icon: L.divIcon({className: 'chev', iconSize: [0, 0],
+        html: `<svg viewBox="-6 -6 12 12" style="transform:rotate(${ang}deg)"><path d="M-4,-4.5 L4,0 L-4,4.5 L-1.5,0 Z"/></svg>`})}).addTo(arrowLayer);
+    });
   });
 }
 map.on('moveend', placeLabels);  // after zooms and pans (including fitBounds' own animation)
@@ -233,7 +296,7 @@ Promise.all([marksReady, fetch(EVENT_URL).then(r => r.json()), land.ready]).then
   select.innerHTML = `<option value="">${ev.name} — choose course</option>` + sections.map(s =>
     `<optgroup label="${s}">${ev.courses.filter(c => c.section === s).map(c => `<option value="${c.no}">Course ${c.no} — ${c.dist} nm</option>`).join('')}</optgroup>`).join('');
   select.onchange = () => draw(select.value);
+  bar.hidden = false;  // before drawing: the fit leaves room for the bar
   const last = store.get('course');
   if (last && ev.courses.some(c => c.no === last)) { select.value = last; draw(last); }
-  bar.hidden = false;
 }).catch(() => showStatus('Could not load courses', 5000));

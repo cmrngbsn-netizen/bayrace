@@ -381,7 +381,6 @@
  "conditions": {
   "raceStart": "18:15",
   "raceHours": 2.5,
-  "raceDays": {"weekday": 5, "from": "2026-04-03", "to": "2026-09-04"},
   "tide": {"id": "9414290", "name": "San Francisco (Golden Gate)"},
   "areas": [
    {"name": "Raccoon Strait", "current": "SFB1212", "at": [37.8719, -122.442]},

@@ -53,7 +53,9 @@ html,body{margin:0;height:100%;background:#0b2a3d;-webkit-user-select:none;user-
 .tag .side.port{background:#c8102e}.tag .side.stbd{background:#00873e}
 .legtag{background:none;border:0}
 .legtag .lt{position:absolute;left:0;top:0;display:flex;align-items:center;gap:2px;white-space:nowrap;background:#ffffffe6;border-radius:5px;padding:1px 5px;font:700 12px system-ui;color:#0b2a3d;box-shadow:0 0 2px #0004}
-.legtag .arr{display:inline-block;font-size:11px;line-height:14px}
+.chev{background:none;border:0}
+.chev svg{position:absolute;left:-8px;top:-8px;width:16px;height:16px;overflow:visible}
+.chev path{fill:#0b2a3d;stroke:#fff;stroke-width:1.5;stroke-linejoin:round;paint-order:stroke}
 .tag .sw.unk{background:#fff;border-style:dashed;position:relative}
 .tag .sw.unk::after{content:'?';position:absolute;inset:0;font:700 8px/9px system-ui;text-align:center;color:#0b2a3d}
 .sf{background:none;border:0}
@@ -100,9 +102,7 @@ html,body{margin:0;height:100%;background:#0b2a3d;-webkit-user-select:none;user-
 .chart .now{stroke:#e34948;stroke-width:1.5;stroke-dasharray:3 2}
 .chart .cross{stroke:#0b0b0b;stroke-width:1;opacity:.5}
 .chart .gust{fill:#2a78d633;stroke:#2a78d6;stroke-width:1}
-.chart .arrow{fill:#0b2a3d}
+.chart .nowl{font:600 9px system-ui;fill:#c4302b}
+.chart .wdir{font:600 10px system-ui;fill:#33322f}
 .chart .tip{position:absolute;top:18px;background:#0b0b0bea;color:#fff;font:12px/1.45 system-ui;padding:6px 8px;border-radius:6px;pointer-events:none;white-space:nowrap}
-#cond details{margin-top:12px;font-size:13px;line-height:1.45}
-#cond details summary{font-weight:600;cursor:pointer}
-#cond details p{margin:6px 0}
 .csrc{margin-top:18px;font-size:12px}
