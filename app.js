@@ -8,8 +8,7 @@ const NOAA_WMS = 'https://gis.charttools.noaa.gov/arcgis/rest/services/MCS/NOAAC
 const noaa = (layers, extra) => L.tileLayer.wms(NOAA_WMS,
   {layers, format: 'image/png', tileSize: 512, detectRetina: true, dpi: L.Browser.retina ? 192 : 96, maxZoom: 18, attribution: 'NOAA Office of Coast Survey — not for navigation', ...extra});
 const BASEMAPS = {
-  'Chart (simple)': noaa('1,2', {display_params: JSON.stringify({ECDISParameters: {version: '10.9', DynamicParameters: {Parameter: [{name: 'DisplayCategory', value: '1'}]}}})}),
-  'Chart (full detail)': noaa('1,2,3,4,5,6,7'),
+  'Chart': noaa('1,2', {display_params: JSON.stringify({ECDISParameters: {version: '10.9', DynamicParameters: {Parameter: [{name: 'DisplayCategory', value: '1'}]}}})}),
   'Plain': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
     {maxZoom: 16, attribution: 'Esri, HERE, Garmin, © OpenStreetMap contributors'}),
   'Satellite': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
@@ -17,7 +16,7 @@ const BASEMAPS = {
 };
 
 // zoomSnap 0.25 lets a course fill the screen instead of snapping to the next whole zoom level out.
-const map = L.map('map', {center: [37.83, -122.43], zoom: 12, zoomSnap: 0.25, zoomControl: false, layers: [BASEMAPS['Chart (simple)']]});
+const map = L.map('map', {center: [37.83, -122.43], zoom: 12, zoomSnap: 0.25, zoomControl: false, layers: [BASEMAPS['Chart']]});
 L.control.zoom({position: 'topleft'}).addTo(map);
 map.attributionControl.setPrefix(false);  // keep the credit line to one row on a phone
 

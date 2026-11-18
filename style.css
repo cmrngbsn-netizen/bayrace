@@ -46,7 +46,7 @@ html,body{margin:0;height:100%;background:#0b2a3d;-webkit-user-select:none;user-
 .tag .t1 b{font-size:16px}
 .tag .ord{align-self:center;min-width:18px;height:18px;padding:0 4px;box-sizing:border-box;border-radius:9px;background:#0b2a3d;color:#fff;font:700 11px/18px system-ui;text-align:center}
 .tag .nick{font-weight:600}
-.tag .place{color:#555;font-size:13px}
+.tag .place{font-weight:600}
 .tag .t2{display:flex;align-items:center;gap:5px;margin-top:2px;color:#333}
 .tag .sw{flex:none;width:12px;height:12px;border-radius:50%;border:1.5px solid #0b2a3d;box-sizing:border-box}
 .tag .side{margin-left:3px;padding:0 5px;border-radius:4px;color:#fff;font:700 11px/16px system-ui;letter-spacing:.04em}
@@ -74,7 +74,14 @@ html,body{margin:0;height:100%;background:#0b2a3d;-webkit-user-select:none;user-
 #cond header{display:flex;align-items:center;justify-content:space-between}
 #cond h2{margin:4px 0;font-size:20px}
 #condclose{border:0;background:none;font-size:30px;line-height:1;padding:4px 8px;color:#333}
-#condwhen{font-size:14px;color:#33322f;margin-bottom:2px}
+#condwhen{font-size:15px;color:#33322f;margin-bottom:2px}
+#condwhen .trow{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#condwhen .trange{border:1px solid #c9c8c2;background:#fff;border-radius:16px;padding:5px 12px;font:600 14px system-ui;color:#0b2a3d}
+#condwhen .trange[aria-expanded="true"]{border-color:#0b2a3d}
+#condwhen .tedit{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin-top:8px;padding:8px 10px;background:#eef3f8;border-radius:10px;font-size:13px;color:#52514e}
+#condwhen .tedit[hidden]{display:none}
+#condwhen .tedit input{font:16px system-ui;margin-left:4px}
+#condwhen .treset{border:0;background:none;color:#2a78d6;font:600 13px system-ui;padding:4px}
 #condplaces{display:flex;flex-wrap:wrap;gap:6px;padding:8px 0 10px}
 #condplaces button{flex:none;border:1px solid #c9c8c2;background:#fff;border-radius:16px;padding:6px 12px;font:600 14px system-ui;color:#333}
 #condplaces button.on{background:#0b2a3d;border-color:#0b2a3d;color:#fff}
