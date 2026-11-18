@@ -4,7 +4,9 @@
 // data/coast.json: OSM coastline simplified to ~10 m; "rings" are islands (closed), "lines" are
 // mainland. OSM coastline keeps land on the left, so the right-hand side is always water.
 const land = (() => {
-  const K = Math.cos(37.85 * Math.PI / 180), CELL = 0.25, CLEAR = 0.05;  // nm
+  // CLEAR: headland waypoints sit this far out. BUF: legs keep at least this far off the coast
+  // (except near their own ends, since a mark can be close to shore).
+  const K = Math.cos(37.85 * Math.PI / 180), CELL = 0.25, CLEAR = 0.08, BUF = 0.05;  // nm
   const toXY = ll => ({x: ll.lng * 60 * K, y: ll.lat * 60});
   const toLL = p => L.latLng(p.y / 60, p.x / 60 / K);
   let segs = [], rings = [], nodes = [], grid = new Map(), ready;
@@ -20,16 +22,28 @@ const land = (() => {
     return ((d1 > 0) !== (d2 > 0)) && ((d3 > 0) !== (d4 > 0));
   };
 
-  // Does segment a-b cross the coastline? Coast pieces in `ignore` (ring ids) don't count.
-  function blocked(a, b, ignore) {
+  const ptSeg = (p, a, b) => {
+    const vx = b.x - a.x, vy = b.y - a.y, t = Math.max(0, Math.min(1, ((p.x - a.x) * vx + (p.y - a.y) * vy) / (vx * vx + vy * vy || 1)));
+    return Math.hypot(p.x - a.x - vx * t, p.y - a.y - vy * t);
+  };
+  const segSeg = (a, b, c, d) => Math.min(ptSeg(a, c, d), ptSeg(b, c, d), ptSeg(c, a, b), ptSeg(d, a, b));
+
+  // Does segment a-b cross the coastline, or (buf > 0) pass within buf of it away from its ends?
+  // Coast pieces in `ignore` (ring ids) don't count.
+  function blocked(a, b, ignore, buf = 0) {
+    const len = Math.hypot(b.x - a.x, b.y - a.y);
+    if (len < 3 * buf) buf = 0;  // a short hop between close points: crossing check only
+    const ux = (b.x - a.x) / (len || 1), uy = (b.y - a.y) / (len || 1);
+    const A = {x: a.x + ux * 1.5 * buf, y: a.y + uy * 1.5 * buf}, B = {x: b.x - ux * 1.5 * buf, y: b.y - uy * 1.5 * buf};
     let hit = false;
     const seen = new Set();
-    cellsOf(a.x, a.y, b.x, b.y, k => {
+    cellsOf(Math.min(a.x, b.x) - buf, Math.min(a.y, b.y) - buf, Math.max(a.x, b.x) + buf, Math.max(a.y, b.y) + buf, k => {
       if (hit) return;
       for (const s of grid.get(k) || []) {
         if (seen.has(s)) continue; seen.add(s);
         const g = segs[s];
-        if (!ignore.has(g.ring) && intersects(a, b, g.a, g.b)) { hit = true; return; }
+        if (ignore.has(g.ring)) continue;
+        if (intersects(a, b, g.a, g.b) || (buf && segSeg(A, B, g.a, g.b) < buf)) { hit = true; return; }
       }
     });
     return hit;
@@ -64,7 +78,12 @@ const land = (() => {
       }
     });
     rings.length = chains.length;
-    nodes = nodes.filter(p => !rings.some(r => r && inRing(p, r)));
+    nodes = nodes.filter(p => !rings.some(r => r && inRing(p, r)) && !nearCoast(p));
+  }
+  function nearCoast(p) {  // a waypoint squeezed into a narrow gap is no use
+    let near = false;
+    cellsOf(p.x - BUF, p.y - BUF, p.x + BUF, p.y + BUF, k => { for (const s of grid.get(k) || []) if (!near && ptSeg(p, segs[s].a, segs[s].b) < BUF) near = true; });
+    return near;
   }
   function norm(x, y) { const l = Math.hypot(x, y) || 1; return {x: x / l, y: y / l}; }
 
@@ -73,7 +92,7 @@ const land = (() => {
   function route(aLL, bLL) {
     const a = toXY(aLL), b = toXY(bLL);
     const ignore = new Set([...ringsAt(a), ...ringsAt(b)]);  // a mark on an island (e.g. Alcatraz Light)
-    if (!blocked(a, b, ignore)) return {path: [aLL, bLL], ok: true};
+    if (!blocked(a, b, ignore, BUF)) return {path: [aLL, bLL], ok: true};
     for (const pad of [0.75, 2.5]) {  // search near the leg first; a mark on the mainland fails fast
       const box = {x0: Math.min(a.x, b.x) - pad, x1: Math.max(a.x, b.x) + pad, y0: Math.min(a.y, b.y) - pad, y1: Math.max(a.y, b.y) + pad};
       const N = [a, b, ...nodes.filter(p => p.x > box.x0 && p.x < box.x1 && p.y > box.y0 && p.y < box.y1)];
@@ -94,7 +113,7 @@ const land = (() => {
       done[u] = 1;
       for (let v = 1; v < N.length; v++) {
         if (done[v] || g[u] + dist(u, v) >= g[v]) continue;
-        if (!blocked(N[u], N[v], ignore)) { g[v] = g[u] + dist(u, v); from[v] = u; }
+        if (!blocked(N[u], N[v], ignore, BUF)) { g[v] = g[u] + dist(u, v); from[v] = u; }
       }
     }
     const out = [];
@@ -103,5 +122,6 @@ const land = (() => {
   }
 
   ready = fetch('data/coast.json').then(r => r.json()).then(build).catch(() => showStatus('Coastline unavailable — legs drawn straight', 5000));
-  return {ready, route, crossesLand: (a, b) => blocked(toXY(a), toXY(b), new Set([...ringsAt(toXY(a)), ...ringsAt(toXY(b))]))};
+  const check = buf => (a, b) => blocked(toXY(a), toXY(b), new Set([...ringsAt(toXY(a)), ...ringsAt(toXY(b))]), buf);
+  return {ready, route, crossesLand: check(0), hugsCoast: check(BUF)};
 })();

@@ -257,14 +257,26 @@ function layLanes(pt) {
       }
       return hit ? GAP * (1 + ahead) : 0;
     });
-    // widen then smooth the offset so lanes part and rejoin gradually
-    const W = 4, wide = raw.map((_, i) => Math.max(...raw.slice(Math.max(0, i - W), i + W + 1)));
-    const len = n.S.length;
-    n.P = n.S.map((p, i) => {
-      const win = wide.slice(Math.max(0, i - W), i + W + 1), off = win.reduce((a, b) => a + b, 0) / win.length * Math.min(1, i * STEP / EASE, (len - 1 - i) * STEP / EASE);
-      return L.point(p.x - p.uy * off, p.y + p.ux * off);  // right of travel (screen y points down)
-    });
-    n.line.setLatLngs(n.P.map(q => map.containerPointToLatLng(q)));
+    const W = 4, len = n.S.length;
+    const shift = raw => {  // widen then smooth the offsets so lanes part and rejoin gradually
+      const wide = raw.map((_, i) => Math.max(...raw.slice(Math.max(0, i - W), i + W + 1)));
+      return n.S.map((p, i) => {
+        const win = wide.slice(Math.max(0, i - W), i + W + 1), off = win.reduce((a, b) => a + b, 0) / win.length * Math.min(1, i * STEP / EASE, (len - 1 - i) * STEP / EASE);
+        return L.point(p.x - p.uy * off, p.y + p.ux * off);  // right of travel (screen y points down)
+      });
+    };
+    // The routed leg is clear of land; a lane moved off it near a shore may not be. Where a lane
+    // would cross the coast, keep it on the route line there, and give up on the lane if needed.
+    let lls;
+    for (let tries = 0; ; tries++) {
+      n.P = shift(raw);
+      lls = n.P.map(q => map.containerPointToLatLng(q));
+      const bad = lls.slice(1).map((b, i) => land.crossesLand(lls[i], b) ? i : -1).filter(i => i >= 0);
+      if (!bad.length) break;
+      if (tries === 3) { n.P = n.S.map(p => L.point(p.x, p.y)); lls = n.P.map(q => map.containerPointToLatLng(q)); break; }
+      bad.forEach(i => { for (let j = Math.max(0, i - 2 * W - 2); j <= Math.min(len - 1, i + 2 * W + 3); j++) raw[j] = 0; });
+    }
+    n.line.setLatLngs(lls);
     // arrows: one mid-lane, more on long lanes
     const total = (len - 1) * STEP;
     if (total < 60) return;
