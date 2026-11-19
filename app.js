@@ -7,16 +7,24 @@
 const NOAA_WMS = 'https://gis.charttools.noaa.gov/arcgis/rest/services/MCS/NOAAChartDisplay/MapServer/exts/MaritimeChartService/WMSServer';
 const noaa = (layers, extra) => L.tileLayer.wms(NOAA_WMS,
   {layers, format: 'image/png', tileSize: 512, detectRetina: true, dpi: L.Browser.retina ? 192 : 96, maxZoom: 18, attribution: 'NOAA Office of Coast Survey — not for navigation', ...extra});
+const ecdis = params => ({display_params: JSON.stringify({ECDISParameters: {version: '10.9', DynamicParameters: {Parameter: Object.entries(params).map(([name, value]) => ({name, value}))}}})});
 const BASEMAPS = {
-  'Chart': noaa('1,2', {display_params: JSON.stringify({ECDISParameters: {version: '10.9', DynamicParameters: {Parameter: [{name: 'DisplayCategory', value: '1'}]}}})}),
+  'Chart': noaa('1,2', ecdis({DisplayCategory: '1'})),
+  // Depths: every display category, so soundings (feet) show, plus four blue shades split at
+  // 6, 12 and 30 ft (the service takes contours in meters). HonorScamin 1 keeps soundings that
+  // the chart would hide at this scale (retina tiles otherwise lose nearly all of them).
+  'Depths': noaa('1,2', ecdis({DisplayCategory: '1,2,4', HonorScamin: 1, TwoDepthShades: 2, ShallowContour: 1.8, SafetyContour: 3.6, DeepContour: 9.1})),
   'Plain': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
     {maxZoom: 16, attribution: 'Esri, HERE, Garmin, © OpenStreetMap contributors'}),
   'Satellite': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
     {maxZoom: 19, attribution: 'Esri, Maxar, Earthstar Geographics'})
 };
 
+// The map last picked on this device (same storage format as courses.js `store`).
+let base = (() => { try { return JSON.parse(localStorage.getItem('bayrace:base')); } catch { return null; } })();
+if (!BASEMAPS[base]) base = 'Chart';
 // zoomSnap 0.25 lets a course fill the screen instead of snapping to the next whole zoom level out.
-const map = L.map('map', {center: [37.83, -122.43], zoom: 12, zoomSnap: 0.25, zoomControl: false, layers: [BASEMAPS['Chart']]});
+const map = L.map('map', {center: [37.83, -122.43], zoom: 12, zoomSnap: 0.25, zoomControl: false, layers: [BASEMAPS[base]]});
 if (!L.Browser.mobile) L.control.zoom({position: 'topleft'}).addTo(map);  // phones pinch; keep the map clear
 map.attributionControl.setPrefix(false);  // keep the credit line to one row on a phone
 
@@ -70,7 +78,6 @@ const showStatus = (msg, ms = 3000) => { status.textContent = msg; status.hidden
 // Chosen = filled button, not chosen = outlined.
 const OVERLAYS = {'YRA marks': groups.yra, 'Club marks': groups.other};
 const layersEl = document.getElementById('layers'), layerBtn = document.getElementById('layerbtn');
-let base = 'Chart';
 function drawLayers() {
   layersEl.innerHTML = `<div class="lrow"><span>Map</span>${Object.keys(BASEMAPS).map(n => `<button type="button" class="btn${n === base ? '' : ' alt'}" data-base="${n}">${n}</button>`).join('')}</div>`
     + `<div class="lrow"><span>Marks</span>${Object.entries(OVERLAYS).map(([n, g]) => `<button type="button" class="btn${map.hasLayer(g) ? '' : ' alt'}" aria-pressed="${map.hasLayer(g)}" data-ov="${n}">${n}</button>`).join('')}</div>`;
@@ -86,7 +93,7 @@ map.on('click', () => showLayers(false));
 layersEl.onclick = e => {
   const b = e.target.closest('button');
   if (!b) return;
-  if (b.dataset.base) { map.removeLayer(BASEMAPS[base]); base = b.dataset.base; map.addLayer(BASEMAPS[base]); }
+  if (b.dataset.base) { map.removeLayer(BASEMAPS[base]); base = b.dataset.base; map.addLayer(BASEMAPS[base]); try { localStorage.setItem('bayrace:base', JSON.stringify(base)); } catch {} }
   if (b.dataset.ov) { const g = OVERLAYS[b.dataset.ov]; map.hasLayer(g) ? map.removeLayer(g) : map.addLayer(g); }
   drawLayers();
 };
